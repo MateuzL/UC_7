@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GRID</title>
+    <style>
+        .conteiner{
+            display: grid;
+            grid-template-columns: 50% 25% 25%; /* uma fração */
+            width: 90%;
+            margin: auto;
+           
+
+        }
+        .item{
+            background-color: rgb(18, 75, 56);
+            border-radius: 5px;
+            height: 150px;
+            margin: 5px;
+            text-align: center;
+            align-content: center; /* tanto na horizontal e na vertical */
+        }
+
+      
+
+    
+        .cabecalho{
+            border: 1px solid;
+            height: 150px;
+            margin: auto;
+            text-align: center;
+            align-content: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            width: 90%;
+        }
+        .menu{
+        
+            border: 1px solid;
+            height: 80px;
+            margin: auto;
+            text-align: center;
+            align-content: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            width: 90%;
+        }
+        .conteiner2{
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr; /* uma fração */
+            width: 90%;
+            margin: auto;
+            
+
+        }
+        
+            
+            
+
+        
+    </style>
+</head>
+<body>
+    
+    <div class="cabecalho"> este é cabeçalho</div>
+    <div class="menu"> menu</div>
+
+
+
+    <div class="conteiner">
+        <div class="item">div 1</div>
+        <div class="item">div 2</div>
+        <div class="item">div 3</div>
+        <div class="item">div 4</div>
+        <div class="item">div 5</div>
+        <div class="item">div 6</div>
+
+    <div class="conteiner2">
+        <div class="item">div 7</div>
+        <div class="item">div 8</div>
+
+    
+</div>
+
+</div>
+</body>
+</html>

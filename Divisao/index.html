@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divisões coloridas</title>
+    <link rel="stylesheet" href="estilo.css">
+
+    <!--CSS-INCORPORAÇÃO( height: altura| widht:largura)-->
+    <style>
+
+        .cabecalho{
+            color: white;
+            font-size: 30px;
+            background-color:rgb(64, 141, 242);
+            height: 150px; 
+            width: 90%;
+            margin: auto;
+            text-align: center;
+            border-radius: 10px;
+            align-items: center;
+            align-content: center;
+            
+            
+        }
+        .menu{
+            background-color: rgb(255, 153, 10);
+            height: 60px;
+            width: 90%;
+            margin: auto;
+            margin-bottom: 4px;
+            margin-top: 4px;
+            color: aliceblue;
+            font-size: 30px;
+            align-items: center;
+            align-content: center;
+
+        }
+
+        .principal{ 
+            background-color: chartreuse;
+            text-align: center;
+            margin: auto;
+            margin-top: 4px;
+            margin-bottom: 4px;
+            height: 400px;
+            width: 90%;
+            align-items: center;
+            align-content: center;
+            color: rgb(22, 117, 201);
+            font-size: 30px;
+
+        }
+
+        .esquerda {
+    width: 48%; /* Ajustado para ocupar melhor o espaço */
+    height: 100px;
+    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: left;
+}
+
+.direita {
+    width: 48%; /* Ajustado para manter a simetria */
+    background-color: chocolate;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+/* Ajuste no rodapé para limpar o fluxo do layout antigo */
+.rodape {
+    background-color: darkgreen;
+    color: white;
+    margin: auto;
+    height: 100px;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centraliza o texto verticalmente */
+    clear: both; /* Garante que o rodapé fique sempre abaixo */
+}
+
+
+</style>
+    
+
+<body>
+    <div class="cabecalho"> Aqui é o cabeçalho do site</div>
+    <div class="menu"> Este é o menu </div>
+    <div class="principal"> Esta é a pagina principal do site</div>
+    <div class="matriz"></div>
+    <div class="esquerda"> coluna a esquerda do site</div>
+    <div class="direita"> coluna a direita do site</div>
+    <div class="rodape"> parte de baixo do site</div>
+
+
+    
+</body>
+</html>

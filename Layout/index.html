@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4ª aula - css incorporado</title>
+    <link rel="stylesheet" href="estilo.css">
+    <style>
+    .conteiner{
+        margin: auto;
+        width: 90%;
+        background-color: #aebbae;
+        height: 1600px;
+        color: white;
+    }
+    .central{
+        margin: auto;
+        width: 90%;
+        display: flex;
+        justify-content: center;
+    }
+    .cabecalho{
+        margin: auto;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        background-color: rgb(41, 162, 122);
+        width: 90%;
+        height: 80px;
+    }
+    .coluna1{
+        width: 30%;
+        height: 200px;
+        background-color: rgb(42, 89, 120);
+        float: left;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .coluna2{
+        width: 30%;
+        height: 200px;
+        background-color: rgb(129, 131, 36);
+        float: left;
+        display: flex;
+        margin: auto;
+         margin-top: 20px;
+        margin-bottom: 20px;        
+    }
+       
+    
+    .coluna3{
+        width: 30%;
+        height: 200px;
+        background-color: rgb(77, 44, 110);
+        float: right;
+        display: flex;
+         margin-top: 20px;
+        margin-bottom: 20px;
+    }
+        
+    
+    .conteudo{
+        background-color: blueviolet;
+        height: 300px;
+        width: 90%;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+
+    .rodape{
+        background-color: darkgreen;
+        color: white;
+        margin: auto;
+        height: 100px;
+        width: 90%;
+        display: flex;
+        margin-top: 30px;
+        margin-bottom: 30px; 
+    }
+
+    
+</style>
+</head>
+
+<body>
+    <div class="conteiner"> este é caixa
+        <div class="cabecalho"> cabeçalho</div>
+        <div class="central">
+                <div class="coluna1">coluna1</div>
+                <div class="coluna2">coluna2</div>
+                <div class="coluna3">coluna3</div>
+        </div>
+        <div class="conteudo">conteudo</div>
+        <div class="rodape">rodape</div>
+    </div>
+
+
+    
+</body>
+</html>
