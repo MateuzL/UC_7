@@ -27,6 +27,11 @@ h1{
         "rodape rodape rodape";
 }
 
+.menu{
+    display: flex;
+    gap: 80px;
+}
+
 .topo-site{
     grid-area: topo;
 }
