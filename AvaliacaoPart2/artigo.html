@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout</title>
+</head>
+<style>
+
+    .painel-principal{
+        display: grid;
+        grid-template-columns: 180px 1fr 1fr;
+        grid-template-rows: 120px 220px 180px 120px;
+        gap: 15px;
+        grid-template-areas: 
+        "header header header"
+        "ia    dev    sdi"
+        "cenario cenario cenario"
+        "footer footer footer";
+    }
+
+    .header{
+        grid-area: header;
+        background-color: aqua;
+    }
+
+    .ia{
+        grid-area: ia;
+        background-color: blueviolet;
+    }
+
+    .dev{
+        grid-area: dev;
+        background-color: brown;
+    }
+
+    .sdi{
+        grid-area: sdi;
+        background-color: chartreuse;
+    }
+
+    .cenario{
+        grid-area: cenario;
+        background-color: crimson;
+    }
+
+    .footer{
+        grid-area: footer;
+        background-color: fuchsia;
+    }
+
+
+</style>
+<body>
+    <div class="painel-principal">
+        <div class="header">Header</div>
+        <div class="ia">Ia</div>
+        <div class="dev">Dev</div>
+        <div class="sdi">Sdi</div>
+        <div class="cenario">Cenario</div>
+        <div class="footer">Footer</div>
+    </div>
+</body>
+</html>

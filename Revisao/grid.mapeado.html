@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+    <style>
+        .container{
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            grid-template-rows: 80px 60px 250px 250px;
+            gap: 8px;
+            grid-template-areas:
+            "cabecalho  cabecalho"
+            "menu       menu"
+            "esquerda   acima"
+            "esquerda   direita";
+        }
+
+        .cabecalho{
+            grid-area: cabecalho;
+            background-color: aqua;
+        }
+
+        .menu{
+            grid-area: menu;
+            background-color: blueviolet;
+        }
+
+        .esquerda{
+            grid-area: esquerda;
+            background-color: brown;
+        }
+
+        .acima{
+            grid-area: acima;
+            background-color: chartreuse;
+        }
+
+        .direita{
+            grid-area: direita;
+            background-color: rgb(219, 150, 0);
+        }
+
+    </style>
+<body>
+    <div class="container">
+        <div class="cabecalho">Título do Site</div>
+        <div class="menu">Menu do site</div>
+        <div class="esquerda">Info a esquerda</div>
+        <div class="acima">Info importantes</div>
+        <div class="direita">Info importantes</div>
+    </div>
+</body>
+</html>
