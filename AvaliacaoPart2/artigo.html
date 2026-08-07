@@ -3,15 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout</title>
+    <title>CorumbáTech</title>
+    <link rel="icon" type="image/png" href="logosemfundo.png">
 </head>
 <style>
 
+    body{
+        font-family: Arial, sans-serif;
+        background: #70757c;
+        padding: 15px;
+        margin: 0;
+    }
+
     .painel-principal{
         display: grid;
-        grid-template-columns: 180px 1fr 1fr;
-        grid-template-rows: 120px 220px 180px 120px;
+        padding: 30px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows:110px 220px auto 150px;
         gap: 15px;
+        width: 80%;
+        height: auto;
+        margin: auto;
         grid-template-areas: 
         "header header header"
         "ia    dev    sdi"
@@ -21,44 +33,292 @@
 
     .header{
         grid-area: header;
-        background-color: aqua;
+        background-color: white;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:10px 20px;
     }
 
     .ia{
         grid-area: ia;
-        background-color: blueviolet;
+        background-color: black;
     }
 
     .dev{
         grid-area: dev;
-        background-color: brown;
+        background-color: black;
     }
 
     .sdi{
         grid-area: sdi;
-        background-color: chartreuse;
+        background-color: black;
     }
 
     .cenario{
-        grid-area: cenario;
-        background-color: crimson;
+        grid-area:cenario;
+
+        background:white;
+
+        display:grid;
+
+        grid-template-columns: 1fr 1.8fr;
+
+        gap:20px;
+
+        padding:20px;
+
+        align-items:center;
+
+        border-radius:10px;
+
+    }
+
+    .imagem-cenario img{
+
+        width:100%;
+
+        height:220px;
+
+        object-fit:cover;
+
+        border-radius:10px;
+
+    }
+
+
+    .texto-cenario{
+
+        text-align:justify;
+
+    }
+
+
+    .texto-cenario h2{
+
+        color:#1E3A5F;
+
+    }
+
+
+    .texto-cenario p{
+
+        color:#444;
+
+        line-height:1.5;
+
     }
 
     .footer{
-        grid-area: footer;
-        background-color: fuchsia;
+        grid-area:footer;
+        background:#1E3A5F;
+        color:white;
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:20px;
+        padding:20px;
+        border-radius:10px;
+        font-size:13px;
     }
+
+
+    .footer h3{
+        margin-top:0;
+        color:#2FB4D4;
+
+    }
+
+
+    .footer p{
+        margin:5px 0;
+
+    }
+
+    .logo img{
+    width:150px;
+    height:auto;
+    }
+
+    .informacoes{
+    text-align:right;
+    font-size:12px;
+    color:#444;
+    }
+
+    .informacoes p{
+    margin:5px 0;
+    }
+
+    .ia,
+    .dev,
+    .sdi{
+        display:flex;
+        flex-direction:column;
+        justify-content:flex-start;
+        align-items:center;
+        background:black;
+        color:white;
+        text-decoration:none;
+        font-size:18px;
+        font-weight:bold;
+        border-radius:10px;
+        overflow:hidden;
+        transition:0.3s;
+        outline: none;
+    }
+
+    .ia span,
+    .dev span,
+    .sdi span{
+        background:#0e0c0c;
+        width:100%;
+        box-sizing:border-box;
+        padding:10px;
+        text-align:center;
+
+    }
+
+    .ia:hover,
+    .dev:hover,
+    .sdi:hover{
+        background:#1E3A5F;
+        transform:translateY(-5px);
+
+    }
+
+
+    .ia img,
+    .dev img,
+    .sdi img{
+         width:100%;
+         height:80%;
+         object-fit:cover;
+         justify-content: auto;
+         border-radius:5px 5px 0 0;
+         display: block;
+
+    }
+  
 
 
 </style>
 <body>
     <div class="painel-principal">
-        <div class="header">Header</div>
-        <div class="ia">Ia</div>
-        <div class="dev">Dev</div>
-        <div class="sdi">Sdi</div>
-        <div class="cenario">Cenario</div>
-        <div class="footer">Footer</div>
+        <header class="header">
+
+            <div class="logo">
+                <img src="logosemfundo.png" alt="Logo CorumbáTech Solutions">
+            </div>
+
+            <div class="informacoes">
+                <p><strong>Tel:</strong> (67) 3456-7890</p>
+                <p><strong>Visite-nos:</strong> Corumbá - MS</p>
+                <p><strong>E-mail:</strong> contato@corumbatech.com.br</p>
+            </div>
+        </header>
+            
+        
+        <a href="inteligencia.html" class="ia">
+
+            <img src="inteligencia.jpg.jpg" alt="Inteligência Artificial">
+
+            <span>
+                Inteligência Artificial
+            </span>
+
+        </a>
+
+
+        <a href="desenvolvedor.html" class="dev">
+
+            <img src="desenvolvedor.jpg" alt="Profissão Desenvolvedor">
+
+            <span>
+                Profissão Desenvolvedor
+            </span>
+
+        </a>
+
+
+    <a href="seguranca.html" class="sdi">
+
+        <img src="seguranca.jpg" alt="Segurança da Informação">
+
+        <span>
+            Segurança da Informação
+        </span>
+
+    </a>
+        <div class="cenario">
+            <div class="imagem-cenario">
+        <img src="cenario.jpg" alt="Tecnologia">
+    </div>
+
+
+    <div class="texto-cenario">
+
+        <h2>Bem-vindo à CorumbáTech</h2>
+
+        <p>
+            A CorumbáTech Solutions é uma empresa de tecnologia
+            focada em inovação e transformação digital.<br>
+        
+            Trabalhamos com soluções envolvendo Inteligência Artificial,
+            Desenvolvimento de Sistemas e Segurança da Informação.<br>
+        
+            Nosso objetivo é apresentar conhecimentos e tendências
+            tecnológicas que ajudam pessoas e empresas a evoluírem.
+        </p>
+
+    </div>
+        </div>
+    <div class="footer">
+        <div class="empresa-footer">
+
+            <h3>CorumbáTech Solutions</h3>
+
+            <p>
+                Tecnologia, inovação e transformação digital.
+            </p>
+
+        </div>
+
+
+        <div class="contato-footer">
+
+            <h3>Contato</h3>
+
+            <p>
+                📞 (67) 3456-7890
+            </p>
+
+            <p>
+                ✉ contato@corumbatech.com.br
+            </p>
+
+        </div>
+
+
+        <div class="local-footer">
+
+            <h3>Localização</h3>
+
+            <p>
+                Corumbá - Mato Grosso do Sul
+            </p>
+
+            <p>
+                Redes sociais:
+            </p>
+
+            <p>
+                Instagram | LinkedIn | Facebook
+            </p>
+
+        </div>
+
+
+    </div>
     </div>
 </body>
 </html>
