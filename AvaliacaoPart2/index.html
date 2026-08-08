@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CorumbáTech</title>
     <link rel="icon" type="image/png" href="logosemfundo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <style>
 
@@ -15,13 +16,14 @@
         margin: 0;
     }
 
+
     .painel-principal{
         display: grid;
         padding: 30px;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows:110px 220px auto 150px;
         gap: 15px;
-        width: 80%;
+        width: 95%;
         height: auto;
         margin: auto;
         grid-template-areas: 
@@ -31,6 +33,7 @@
         "footer footer footer";
     }
 
+
     .header{
         grid-area: header;
         background-color: white;
@@ -38,12 +41,15 @@
         justify-content:space-between;
         align-items:center;
         padding:10px 20px;
+        border-radius: 10px;
     }
+
 
     .ia{
         grid-area: ia;
         background-color: black;
     }
+
 
     .dev{
         grid-area: dev;
@@ -191,12 +197,36 @@
     .dev img,
     .sdi img{
          width:100%;
-         height:80%;
+         height:82%;
          object-fit:cover;
          justify-content: auto;
          border-radius:5px 5px 0 0;
          display: block;
 
+    }
+
+    .informacoes i{
+        color:#1E3A5F;
+        width:20px;
+        margin-right:5px;
+    }
+
+    .footer i{
+        color:#2FB4D4;
+        width:20px;
+        margin-right:8px;
+    }
+
+    .local-footer .fa-instagram{
+        color:#E4405F;
+    }
+
+    .local-footer .fa-linkedin{
+        color:#0A66C2;
+    }
+
+    .local-footer .fa-facebook{
+        color:#1877F2;
     }
   
 
@@ -211,16 +241,16 @@
             </div>
 
             <div class="informacoes">
-                <p><strong>Tel:</strong> (67) 3456-7890</p>
-                <p><strong>Visite-nos:</strong> Corumbá - MS</p>
-                <p><strong>E-mail:</strong> contato@corumbatech.com.br</p>
+                <p><i class="fa-solid fa-phone"></i> (67) 3456-7890</p>
+                <p><i class="fa-solid fa-location-dot"></i> Corumbá - MS</p>
+                <p><i class="fa-solid fa-envelope"></i> contato@corumbatech.com.br</p>
             </div>
         </header>
             
         
         <a href="inteligencia.html" class="ia">
 
-            <img src="inteligencia.jpg.jpg" alt="Inteligência Artificial">
+            <img src="inteligencia.jpeg" alt="Inteligência Artificial">
 
             <span>
                 Inteligência Artificial
@@ -240,7 +270,7 @@
         </a>
 
 
-    <a href="seguranca.html" class="sdi">
+    <a href="segurança.html" class="sdi">
 
         <img src="seguranca.jpg" alt="Segurança da Informação">
 
@@ -288,9 +318,9 @@
 
             <h3>Contato</h3>
 
-            <p>
-                📞 (67) 3456-7890
-            </p>
+            
+                <p><i class="fa-solid fa-phone"></i> (67) 3456-7890</p>
+            
 
             <p>
                 ✉ contato@corumbatech.com.br
@@ -303,16 +333,27 @@
 
             <h3>Localização</h3>
 
-            <p>
-                Corumbá - Mato Grosso do Sul
-            </p>
+            
+                <p><i class="fa-solid fa-location-dot"></i>Corumbá - Mato Grosso do Sul</p>
+            
 
             <p>
                 Redes sociais:
             </p>
 
             <p>
-                Instagram | LinkedIn | Facebook
+                <i class="fa-brands fa-instagram"></i>
+                    Instagram
+
+                    &nbsp;&nbsp;
+
+                    <i class="fa-brands fa-linkedin"></i>
+                    LinkedIn
+
+                    &nbsp;&nbsp;
+
+                    <i class="fa-brands fa-facebook"></i>
+                    Facebook
             </p>
 
         </div>
