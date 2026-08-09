@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Segurança da Informação - CorumbáTech</title>
+
+    <link rel="icon" type="image/png" href="logosemfundo.png">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #70757c;
+            padding: 15px;
+        }
+
+        .pagina {
+            width: 80%;
+            margin: auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            background: white;
+        }
+
+        .logo img {
+            width: 150px;
+        }
+
+        .informacoes {
+            text-align: right;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .informacoes p {
+            margin: 5px 0;
+        }
+
+        .informacoes i {
+            color: #1E3A5F;
+            width: 20px;
+            margin-right: 5px;
+        }
+
+        .menu {
+            background: #1E3A5F;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            color: #2FB4D4;
+        }
+
+        .conteudo {
+            padding: 30px;
+        }
+
+        .conteudo img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #1E3A5F;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            color: #1E3A5F;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #444;
+            line-height: 1.6;
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 25px;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .footer {
+            background: #1E3A5F;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .footer p {
+            color: white;
+            text-align: center;
+            margin: 5px;
+        }
+
+        @media (max-width: 768px) {
+
+            .pagina {
+                width: 100%;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .informacoes {
+                text-align: center;
+            }
+
+            .menu a {
+                display: block;
+                margin: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="pagina">
+
+        <header class="header">
+
+            <div class="logo">
+                <img src="logosemfundo.png" alt="Logo CorumbáTech Solutions">
+            </div>
+
+            <div class="informacoes">
+
+                <p>
+                    <i class="fa-solid fa-phone"></i>
+                    (67) 3456-7890
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Corumbá - MS
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-envelope"></i>
+                    contato@corumbatech.com.br
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <nav class="menu">
+
+            <a href="index.html">
+                <i class="fa-solid fa-house"></i>
+                Início
+            </a>
+
+            <a href="inteligencia.html">
+                Inteligência Artificial
+            </a>
+
+            <a href="desenvolvedor.html">
+                Desenvolvedor
+            </a>
+
+            <a href="segurança.html">
+                Segurança
+            </a>
+
+        </nav>
+
+
+        <main class="conteudo">
+
+            <img src="seguranca.jpg" alt="Segurança da Informação">
+
+            <h1>Segurança da Informação</h1>
+
+            <p>
+                A Segurança da Informação é uma área da tecnologia
+                responsável por proteger informações e sistemas contra
+                acessos não autorizados, alterações indevidas,
+                perdas e outras ameaças.
+            </p>
+
+            <p>
+                Com o aumento da utilização da internet e dos sistemas
+                digitais, proteger informações tornou-se uma preocupação
+                importante para empresas, organizações e usuários.
+            </p>
+
+            <h2>Principais objetivos</h2>
+
+            <ul>
+                <li>Proteger informações contra acessos não autorizados;</li>
+                <li>Garantir a integridade dos dados;</li>
+                <li>Manter a disponibilidade das informações;</li>
+                <li>Reduzir riscos de ataques digitais;</li>
+                <li>Proteger sistemas e redes.</li>
+            </ul>
+
+            <h2>Principais ameaças</h2>
+
+            <p>
+                Entre as ameaças encontradas no ambiente digital estão
+                vírus, golpes virtuais, phishing, roubo de senhas,
+                programas maliciosos e acessos não autorizados.
+            </p>
+
+            <h2>Como proteger as informações?</h2>
+
+            <ul>
+                <li>Utilizar senhas fortes;</li>
+                <li>Ativar autenticação em dois fatores;</li>
+                <li>Manter sistemas e programas atualizados;</li>
+                <li>Evitar links suspeitos;</li>
+                <li>Realizar backups importantes;</li>
+                <li>Utilizar ferramentas de segurança.</li>
+            </ul>
+
+            <h2>Importância para as empresas</h2>
+
+            <p>
+                Empresas armazenam informações importantes sobre seus
+                clientes, funcionários e operações. Por isso, investir
+                em segurança da informação ajuda a reduzir riscos,
+                proteger dados e aumentar a confiabilidade dos sistemas.
+            </p>
+
+        </main>
+
+
+        <footer class="footer">
+
+            <p><strong>CorumbáTech Solutions</strong></p>
+
+            <p>
+                Tecnologia, inovação e transformação digital.
+            </p>
+
+            <p>
+                © 2026 CorumbáTech Solutions
+            </p>
+
+        </footer>
+
+    </div>
+
+</body>
+
+</html>
