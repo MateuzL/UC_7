@@ -9,225 +9,487 @@
 </head>
 <style>
 
-    body{
+    /* =========================
+       CONFIGURAÇÕES GERAIS
+    ========================= */
+
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
         font-family: Arial, sans-serif;
         background: #70757c;
-        padding: 15px;
         margin: 0;
+        padding: 0;
     }
 
 
-    .painel-principal{
+    /* =========================
+       PAINEL PRINCIPAL
+    ========================= */
+
+    .painel-principal {
         display: grid;
-        padding: 30px;
+
         grid-template-columns: repeat(3, 1fr);
-        grid-template-rows:110px 220px auto 150px;
+
+        grid-template-rows:
+            auto
+            250px
+            auto
+            auto;
+
         gap: 15px;
+
         width: 95%;
-        height: auto;
+        max-width: 1400px;
+
         margin: auto;
-        grid-template-areas: 
-        "header header header"
-        "ia    dev    sdi"
-        "cenario cenario cenario"
-        "footer footer footer";
+        padding: 30px;
+
+        grid-template-areas:
+            "header header header"
+            "ia dev sdi"
+            "cenario cenario cenario"
+            "footer footer footer";
     }
 
 
-    .header{
+    /* =========================
+       CABEÇALHO
+    ========================= */
+
+    .header {
         grid-area: header;
+
         background-color: white;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:10px 20px;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 10px 20px;
+
         border-radius: 10px;
     }
 
+    .logo img {
+        width: 150px;
+        height: auto;
+    }
 
-    .ia{
-        grid-area: ia;
-        background-color: black;
+    .informacoes {
+        text-align: right;
+        font-size: 12px;
+        color: #444;
+    }
+
+    .informacoes p {
+        margin: 5px 0;
+    }
+
+    .informacoes i {
+        color: #1E3A5F;
+        width: 20px;
+        margin-right: 5px;
     }
 
 
-    .dev{
-        grid-area: dev;
-        background-color: black;
-    }
-
-    .sdi{
-        grid-area: sdi;
-        background-color: black;
-    }
-
-    .cenario{
-        grid-area:cenario;
-
-        background:white;
-
-        display:grid;
-
-        grid-template-columns: 1fr 1.8fr;
-
-        gap:20px;
-
-        padding:20px;
-
-        align-items:center;
-
-        border-radius:10px;
-
-    }
-
-    .imagem-cenario img{
-
-        width:100%;
-
-        height:220px;
-
-        object-fit:cover;
-
-        border-radius:10px;
-
-    }
-
-
-    .texto-cenario{
-
-        text-align:justify;
-
-    }
-
-
-    .texto-cenario h2{
-
-        color:#1E3A5F;
-
-    }
-
-
-    .texto-cenario p{
-
-        color:#444;
-
-        line-height:1.5;
-
-    }
-
-    .footer{
-        grid-area:footer;
-        background:#1E3A5F;
-        color:white;
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:20px;
-        padding:20px;
-        border-radius:10px;
-        font-size:13px;
-    }
-
-
-    .footer h3{
-        margin-top:0;
-        color:#2FB4D4;
-
-    }
-
-
-    .footer p{
-        margin:5px 0;
-
-    }
-
-    .logo img{
-    width:150px;
-    height:auto;
-    }
-
-    .informacoes{
-    text-align:right;
-    font-size:12px;
-    color:#444;
-    }
-
-    .informacoes p{
-    margin:5px 0;
-    }
+    /* =========================
+       CARDS
+    ========================= */
 
     .ia,
     .dev,
-    .sdi{
-        display:flex;
-        flex-direction:column;
-        justify-content:flex-start;
-        align-items:center;
-        background:black;
-        color:white;
-        text-decoration:none;
-        font-size:18px;
-        font-weight:bold;
-        border-radius:10px;
-        overflow:hidden;
-        transition:0.3s;
+    .sdi {
+        display: flex;
+        flex-direction: column;
+
+        justify-content: flex-start;
+        align-items: center;
+
+        background: black;
+        color: white;
+
+        text-decoration: none;
+
+        font-size: 18px;
+        font-weight: bold;
+
+        border-radius: 10px;
+
+        overflow: hidden;
+
+        transition: 0.3s;
+
         outline: none;
     }
 
+
     .ia span,
     .dev span,
-    .sdi span{
-        background:#0e0c0c;
-        width:100%;
-        box-sizing:border-box;
-        padding:10px;
-        text-align:center;
+    .sdi span {
+        background: #0e0c0c;
 
-    }
+        width: 100%;
 
-    .ia:hover,
-    .dev:hover,
-    .sdi:hover{
-        background:#1E3A5F;
-        transform:translateY(-5px);
+        padding: 10px;
 
+        text-align: center;
     }
 
 
     .ia img,
     .dev img,
-    .sdi img{
-         width:100%;
-         height:82%;
-         object-fit:cover;
-         justify-content: auto;
-         border-radius:5px 5px 0 0;
-         display: block;
+    .sdi img {
+        width: 100%;
+        height: 100%;
+
+        min-height: 0;
+
+        object-fit: cover;
+
+        display: block;
+    }
+
+
+    .ia:hover,
+    .dev:hover,
+    .sdi:hover {
+        background: #1E3A5F;
+
+        transform: translateY(-5px);
+    }
+
+
+    /* =========================
+       CENÁRIO
+    ========================= */
+
+    .cenario {
+        grid-area: cenario;
+
+        background: white;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1.8fr;
+
+        gap: 20px;
+
+        padding: 20px;
+
+        align-items: center;
+
+        border-radius: 10px;
+    }
+
+
+    .imagem-cenario img {
+        width: 100%;
+
+        height: 250px;
+
+        object-fit: cover;
+
+        border-radius: 10px;
+
+        display: block;
+    }
+
+
+    .texto-cenario {
+        text-align: justify;
+    }
+
+
+    .texto-cenario h2 {
+        color: #1E3A5F;
+
+        text-align: center;
+
+        margin-bottom: 15px;
+    }
+
+
+    .texto-cenario p {
+        color: #444;
+
+        line-height: 1.5;
+
+        text-align: center;
+    }
+
+
+    /* =========================
+       RODAPÉ
+    ========================= */
+
+    .footer {
+        grid-area: footer;
+
+        background: #1E3A5F;
+
+        color: white;
+
+        display: grid;
+
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 20px;
+
+        padding: 20px;
+
+        border-radius: 10px;
+
+        font-size: 13px;
+    }
+
+
+    .footer h3 {
+        margin-top: 0;
+
+        color: #2FB4D4;
+
+        margin-bottom: 10px;
+    }
+
+
+    .footer p {
+        margin: 5px 0;
+    }
+
+
+    .footer i {
+        color: #2FB4D4;
+
+        width: 20px;
+
+        margin-right: 8px;
+    }
+
+
+    .local-footer .fa-instagram {
+        color: #E4405F;
+    }
+
+    .local-footer .fa-linkedin {
+        color: #0A66C2;
+    }
+
+    .local-footer .fa-facebook {
+        color: #1877F2;
+    }
+
+
+    /* =========================
+       TABLETS
+    ========================= */
+
+    @media (max-width: 900px) {
+
+        .painel-principal {
+            width: 100%;
+
+            padding: 20px;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            grid-template-rows:
+                auto
+                250px
+                250px
+                auto
+                auto;
+
+            grid-template-areas:
+                "header header"
+                "ia dev"
+                "sdi sdi"
+                "cenario cenario"
+                "footer footer";
+        }
+
+
+        .header {
+            padding: 15px;
+        }
+
+
+        .cenario {
+            grid-template-columns: 1fr;
+        }
+
+
+        .imagem-cenario img {
+            height: 250px;
+        }
+
+
+        .footer {
+            grid-template-columns: repeat(2, 1fr);
+        }
 
     }
 
-    .informacoes i{
-        color:#1E3A5F;
-        width:20px;
-        margin-right:5px;
+
+    /* =========================
+       CELULARES
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        body {
+            background: #70757c;
+        }
+
+
+        .painel-principal {
+            width: 100%;
+
+            padding: 10px;
+
+            gap: 10px;
+
+            grid-template-columns: 1fr;
+
+            grid-template-rows: auto;
+
+            grid-template-areas:
+                "header"
+                "ia"
+                "dev"
+                "sdi"
+                "cenario"
+                "footer";
+        }
+
+
+        /* CABEÇALHO */
+
+        .header {
+            flex-direction: column;
+
+            justify-content: center;
+
+            text-align: center;
+
+            gap: 10px;
+
+            padding: 15px;
+        }
+
+
+        .logo img {
+            width: 130px;
+        }
+
+
+        .informacoes {
+            text-align: center;
+
+            font-size: 13px;
+        }
+
+
+        .informacoes p {
+            margin: 7px 0;
+        }
+
+
+        /* CARDS */
+
+        .ia,
+        .dev,
+        .sdi {
+            width: 100%;
+
+            min-height: 250px;
+
+            font-size: 16px;
+        }
+
+
+        .ia img,
+        .dev img,
+        .sdi img {
+            height: 220px;
+
+            width: 100%;
+
+            object-fit: cover;
+        }
+
+
+        .ia span,
+        .dev span,
+        .sdi span {
+            padding: 12px;
+        }
+
+
+        /* CENÁRIO */
+
+        .cenario {
+            grid-template-columns: 1fr;
+
+            padding: 15px;
+
+            gap: 15px;
+        }
+
+
+        .imagem-cenario img {
+            width: 100%;
+
+            height: 220px;
+
+            object-fit: cover;
+        }
+
+
+        .texto-cenario h2 {
+            font-size: 21px;
+        }
+
+
+        .texto-cenario p {
+            font-size: 15px;
+
+            line-height: 1.6;
+
+            text-align: center;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+            grid-template-columns: 1fr;
+
+            text-align: center;
+
+            gap: 20px;
+
+            padding: 20px;
+        }
+
+
+        .footer h3 {
+            margin-bottom: 8px;
+        }
+
+
+        .local-footer p {
+            text-align: center;
+        }
+
     }
 
-    .footer i{
-        color:#2FB4D4;
-        width:20px;
-        margin-right:8px;
-    }
-
-    .local-footer .fa-instagram{
-        color:#E4405F;
-    }
-
-    .local-footer .fa-linkedin{
-        color:#0A66C2;
-    }
-
-    .local-footer .fa-facebook{
-        color:#1877F2;
-    }
+</style>
   
 
 
