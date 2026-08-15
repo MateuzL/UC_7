@@ -16,6 +16,7 @@ body{
         margin: auto;
         grid-template-areas: 
         "header header header"
+        "menu menu menu"
         "ia    dev    sdi"
         "cenario cenario cenario"
         "footer footer footer";
