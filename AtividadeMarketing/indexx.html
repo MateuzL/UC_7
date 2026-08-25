@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Site de Marketing</title>
+    <title>Site de Marketin</title>
 
     <style>
 
@@ -19,15 +19,12 @@
         .container {
             width: 80%;
             margin: 20px auto;
-
             display: grid;
-
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr 1fr;
             grid-template-rows: 100px 400px;
-
             grid-template-areas:
                 "cabecalho cabecalho"
-                "video lateral";
+                "video video";
 
             gap: 10px;
         }
@@ -35,45 +32,31 @@
         /* CABEÇALHO */
         .cabecalho {
             grid-area: cabecalho;
-
-            background-color: #3498db;
-
+            background-color: #ec5519;
             display: flex;
             justify-content: center;
             align-items: center;
-
             color: white;
             font-size: 30px;
             font-weight: bold;
-
             border-radius: 5px;
         }
 
         /* VÍDEO */
         .video {
             grid-area: video;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .video video {
             width: 100%;
             height: 500px;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
             border-radius: 5px;
         }
 
-        /* LATERAL */
-        .lateral {
-            grid-area: lateral;
-            background-color: #eeeeee;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 25px;
-            font-weight: bold;
-            border-radius: 5px;
-        }
+        
 
     </style>
 </head>
@@ -84,7 +67,7 @@
 
         <!-- CABEÇALHO -->
         <div class="cabecalho">
-            Marketing
+            Site de Marketing - Desafio Burguer King
         </div>
 
 
@@ -97,11 +80,6 @@
 
         </div>
 
-
-        <!-- LATERAL DIREITA -->
-        <div class="lateral">
-            Informações do site/empresa
-        </div>
 
     </div>
 
