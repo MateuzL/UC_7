@@ -1,0 +1,64 @@
+PROJETO SENAC - PORTAL EDUCACIONAL
+====================================
+
+1. COMO ABRIR
+-------------
+Abra o arquivo index.html no navegador.
+
+2. ESTRUTURA
+------------
+index.html             -> página inicial
+informatica.html       -> página do curso de Informática
+administracao.html     -> página do curso de Administração
+enfermagem.html        -> página do curso de Enfermagem
+css/style.css          -> todo o estilo do site
+images/                -> local das imagens e vídeo
+
+3. ONDE COLOCAR AS IMAGENS
+--------------------------
+Dentro da pasta images, coloque:
+
+informatica.jpg
+administracao.jpg
+enfermagem.jpg
+banner.mp4
+
+Os nomes precisam ser iguais aos usados no HTML.
+
+4. COMO EXPLICAR O PROJETO
+--------------------------
+HTML:
+- Cria a estrutura das páginas.
+- header = cabeçalho.
+- nav = menu.
+- main = conteúdo principal.
+- section = seções.
+- article = cada card de curso.
+- footer = rodapé.
+- a = links e navegação.
+- form/input/button = campo de busca.
+
+CSS:
+- Define cores, tamanhos, espaçamentos e posicionamento.
+- display:flex é usado no cabeçalho e rodapé.
+- display:grid cria os 3 cards.
+- @media deixa o site responsivo para telas menores.
+
+5. OBSERVAÇÃO
+-------------
+O conteúdo de carga horária e grade curricular foi colocado como conteúdo
+demonstrativo para montar a estrutura solicitada. Antes de apresentar como
+informação oficial, confira os dados oficiais do SENAC MS.
+
+6. REQUISITOS DO ENUNCIADO ATENDIDOS
+------------------------------------
+- Fundo cinza claro.
+- Container centralizado com aproximadamente 90%.
+- Cabeçalho com logo, menu e busca.
+- Banner com 250px de altura.
+- Área de três cards em Grid.
+- Páginas individuais dos cursos.
+- Links para as páginas indicadas do SENAC MS.
+- Rodapé em azul.
+- Layout responsivo.
+- Projeto feito somente com HTML5 e CSS3.

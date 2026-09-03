@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENAC - Portal Educacional</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header>
+    <div class="container topo">
+
+        <!-- Local para colocar a logo oficial do SENAC -->
+        <div class="logo">
+            <img src="images/logo.png">
+        </div>
+
+        <nav>
+            <ul class="menu">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="informatica.html">Técnico em Informática</a></li>
+                <li><a href="administracao.html">Técnico em Administração</a></li>
+                <li><a href="enfermagem.html">Técnico em Enfermagem</a></li>
+            </ul>
+        </nav>
+
+        <!-- Busca simples usando o Google -->
+        <form class="busca">
+            <input type="search" name="q" placeholder="Pesquisar">
+            <button type="submit">Buscar</button>
+        </form>
+
+    </div>
+</header>
+
+<main class="container">
+
+    <!--
+        BANNER:
+        Coloque seu arquivo de vídeo na pasta images.
+        Exemplo: images/banner.mp4
+    -->
+    <section class="banner">
+        <video controls autoplay muted loop>
+            <source src="images/banner.mp4" type="video/mp4">
+            Seu navegador não consegue reproduzir este vídeo.
+        </video>
+    </section>
+
+    <section class="destaque">
+        <h1 class="titulo">Cursos Técnicos</h1>
+
+        <div class="cards">
+
+            <article class="card">
+                <!-- Coloque aqui a imagem do curso de Informática -->
+                <img src="images/informatica.jpeg" alt="Imagem do curso Técnico em Informática">
+
+                <div class="card-conteudo">
+                    <h3>Técnico em Informática</h3>
+                    <p>Formação voltada para tecnologia, programação, desenvolvimento e suporte em informática.</p>
+                    <a class="botao" href="informatica.html">Saiba mais</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <!-- Coloque aqui a imagem do curso de Administração -->
+                <img src="images/administracao.jpg" alt="Imagem do curso Técnico em Administração">
+
+                <div class="card-conteudo">
+                    <h3>Técnico em Administração</h3>
+                    <p>Formação para atuar em processos administrativos, organização e apoio à gestão.</p>
+                    <a class="botao" href="administracao.html">Saiba mais</a>
+                </div>
+            </article>
+
+            <article class="card">
+                <!-- Coloque aqui a imagem do curso de Enfermagem -->
+                <img src="images/enfermagem.png" alt="Imagem do curso Técnico em Enfermagem">
+
+                <div class="card-conteudo">
+                    <h3>Técnico em Enfermagem</h3>
+                    <p>Formação voltada para cuidados de enfermagem e atuação em serviços de saúde.</p>
+                    <a class="botao" href="enfermagem.html">Saiba mais</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container rodape">
+        <div>
+            <h3>SENAC</h3>
+            <p>Serviço Nacional de Aprendizagem Comercial</p>
+        </div>
+
+        <div>
+            <h3>Portal Educacional</h3>
+            <p>Informações sobre cursos técnicos.</p>
+        </div>
+
+        <div>
+            <h3>Contato</h3>
+            <p>Senac MS</p>
+        </div>
+    </div>
+
+    <p class="copyright">Projeto acadêmico - HTML5 e CSS3</p>
+</footer>
+
+</body>
+</html>

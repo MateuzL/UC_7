@@ -1,0 +1,12 @@
+COLOQUE AQUI OS ARQUIVOS DE IMAGEM E VÍDEO.
+
+Arquivos esperados:
+- banner.mp4
+- informatica.jpg
+- administracao.jpg
+- enfermagem.jpg
+- informatica.jpg também é usado na página do curso de Informática
+- administracao.jpg também é usado na página do curso de Administração
+- enfermagem.jpg também é usado na página do curso de Enfermagem
+
+Você pode trocar os nomes, mas nesse caso também precisa alterar o atributo src nos arquivos HTML.
