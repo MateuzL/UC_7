@@ -1,0 +1,97 @@
+<!---Atividade prática: Desafio Marketing (Criação de Banners e Publicação WEB)
+Objetivos: Desenvolver 3 banners e integrar em uma página HTML/CSS responsiva.
+Largura banner: 20cm
+Altura: 4cm
+Artes inspiradas no Mc'Donalds
+
+OBS: Adicionar as artes em formato de vídeo autoplay na sua página web.-->
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Site de Marketing</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 100px 400px;
+            grid-template-areas:
+                "cabecalho cabecalho"
+                "video video";
+
+            gap: 10px;
+        }
+
+        /* CABEÇALHO */
+        .cabecalho {
+            grid-area: cabecalho;
+            background-color: #ec5519;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* VÍDEO */
+        .video {
+            grid-area: video;
+            object-fit: contain;
+        }
+
+        .video video {
+            width: 100%;
+            height: 350px;
+            object-fit: contain;
+            display: block;
+            border-radius: 5px;
+        }
+
+        
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- CABEÇALHO -->
+        <div class="cabecalho">
+            Marketing - MC'Donalds
+        </div>
+
+
+        <!-- VÍDEO -->
+        <div class="video">
+
+            <video autoplay muted loop playsinline>
+                <source src="marketingmcdonaldsmp4.mp4" type="video/mp4">
+            </video>
+
+        </div>
+
+
+    </div>
+
+</body>
+
+</html>

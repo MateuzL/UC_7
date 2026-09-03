@@ -1,0 +1,9 @@
+.banner3{
+    background-color:rgb(255, 251, 0);
+    height: 300px;
+    width: 100%;
+    border-radius: 10px;
+    margin: 15px;
+    padding: 5px;
+    gap: 5px;
+}
