@@ -1,3 +1,29 @@
+
+<?php
+$sucesso = '';
+$erro = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $destino = 'mariahelenalbaneze@gmail.com';
+    $nome = trim($_POST['nome'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $assunto = trim($_POST['assunto'] ?? '');
+    $mensagem = trim($_POST['mensagem'] ?? '');
+    if ($nome === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || $assunto === '' || $mensagem === '') {
+        $erro = 'Preencha todos os campos corretamente.';
+    } else {
+        $assuntoSeguro = 'Contato - ' . preg_replace('/[\r\n]+/', ' ', $assunto);
+        $corpo = "Nome: $nome\nE-mail: $email\n\nMensagem:\n$mensagem";
+        $headers = "From: formulario@" . ($_SERVER['HTTP_HOST'] ?? 'localhost') . "\r\n" .
+                   "Reply-To: $email\r\n" .
+                   "Content-Type: text/plain; charset=UTF-8\r\n";
+        if (@mail($destino, $assuntoSeguro, $corpo, $headers)) {
+            $sucesso = 'Mensagem enviada com sucesso!';
+        } else {
+            $erro = 'Não foi possível enviar a mensagem. Verifique a configuração de e-mail do servidor.';
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -11,141 +37,56 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<canvas id="matrixCanvas" aria-hidden="true"></canvas>
 <div class="grid-bg"></div>
-
 <header class="navbar">
   <a class="logo" href="#inicio" aria-label="Desenvolvedores Corumbá">
-    <span class="logo-symbol">&lt;/&gt;</span>
-    <span><strong>DESENVOLVEDORES</strong><small>CORUMBÁ • MS</small></span>
+    <span class="logo-symbol">&lt;/&gt;</span><span><strong>DESENVOLVEDORES</strong><small>CORUMBÁ • MS</small></span>
   </a>
   <button class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
   <nav class="nav-menu">
-    <a class="active" href="#inicio">🏠 Início</a>
-    <a href="#projetos">📂 Projetos</a>
-    <a href="#galeria">🖼️ Galeria</a>
-    <a href="#sobre">ℹ️ Sobre</a>
-    <a href="#contato">✉️ Fale Conosco</a>
+    <a class="active" href="#inicio">🏠 Início</a><a href="#projetos">📂 Projetos</a><a href="#galeria">🖼️ Galeria</a><a href="#sobre">ℹ️ Sobre</a><a href="#contato">✉️ Fale Conosco</a>
   </nav>
 </header>
-
 <main id="inicio">
 <section class="hero">
   <div class="hero-slides">
-    <article class="hero-slide active">
-      <div class="hero-copy">
-        <span class="eyebrow">BACKEND</span>
-        <h1>Node<span>.js</span></h1>
-        <p>Construção de APIs e aplicações rápidas, escaláveis e orientadas a serviços usando JavaScript no servidor.</p>
-        <code>const server = http.createServer();</code>
-      </div>
-      <div class="hero-art node-art"><b>JS</b><small>NODE.JS</small></div>
-    </article>
-    <article class="hero-slide">
-      <div class="hero-copy">
-        <span class="eyebrow">WEB</span>
-        <h1>Web <span>Development</span></h1>
-        <p>HTML, CSS, JavaScript e PHP para criar páginas, sistemas web e experiências digitais responsivas.</p>
-        <code>&lt;main&gt; • CSS • JS • PHP</code>
-      </div>
-      <div class="hero-art web-art"><b>&lt;/&gt;</b><small>HTML • CSS • JS • PHP</small></div>
-    </article>
-    <article class="hero-slide">
-      <div class="hero-copy">
-        <span class="eyebrow">DESKTOP</span>
-        <h1>Desktop <span>Apps</span></h1>
-        <p>ElectronJS, Qt/PySide6, Flutter Desktop e .NET MAUI para soluções multiplataforma.</p>
-        <code>DESKTOP • CROSS-PLATFORM • UI</code>
-      </div>
-      <div class="hero-art desktop-art"><b>▣</b><small>ELECTRON • QT • FLUTTER • MAUI</small></div>
-    </article>
-    <article class="hero-slide">
-      <div class="hero-copy">
-        <span class="eyebrow">MOBILE + IA</span>
-        <h1>Mobile <span>& IA</span></h1>
-        <p>React Native, Visual Studio Code, Android Studio e ferramentas de Inteligência Artificial.</p>
-        <code>AI + MOBILE + PRODUCTIVITY</code>
-      </div>
-      <div class="hero-art ai-art"><b>AI</b><small>REACT NATIVE • ANDROID • IA</small></div>
-    </article>
+    <article class="hero-slide active"><div class="hero-copy"><span class="eyebrow">• BACKEND</span><h1>Node<span>.js</span></h1><p>Construção de APIs e aplicações rápidas, escaláveis e orientadas a serviços usando JavaScript no servidor.</p><code>const server = http.createServer();</code></div><div class="hero-art node-art"><b>JS</b><small>NODE.JS</small></div></article>
+    <article class="hero-slide"><div class="hero-copy"><span class="eyebrow">• WEB</span><h1>Web <span>Development</span></h1><p>HTML, CSS, JavaScript e PHP para criar páginas, sistemas web e experiências digitais responsivas.</p><code>&lt;main&gt; • CSS • JS • PHP</code></div><div class="hero-art web-art"><b>&lt;/&gt;</b><small>HTML • CSS • JS • PHP</small></div></article>
+    <article class="hero-slide"><div class="hero-copy"><span class="eyebrow">• DESKTOP</span><h1>Desktop <span>Apps</span></h1><p>ElectronJS, Qt/PySide6, Flutter Desktop e .NET MAUI para soluções multiplataforma.</p><code>DESKTOP • CROSS-PLATFORM • UI</code></div><div class="hero-art desktop-art"><b>▣</b><small>ELECTRON • QT • FLUTTER • MAUI</small></div></article>
+    <article class="hero-slide"><div class="hero-copy"><span class="eyebrow">• MOBILE + IA</span><h1>Mobile <span>& IA</span></h1><p>React Native, Visual Studio Code, Android Studio e ferramentas de Inteligência Artificial.</p><code>AI + MOBILE + PRODUCTIVITY</code></div><div class="hero-art ai-art"><b>AI</b><small>REACT NATIVE • ANDROID • IA</small></div></article>
   </div>
-  <button class="hero-btn prev" aria-label="Banner anterior">‹</button>
-  <button class="hero-btn next" aria-label="Próximo banner">›</button>
-  <div class="hero-dots">
-    <button class="active" aria-label="Banner 1"></button><button aria-label="Banner 2"></button>
-    <button aria-label="Banner 3"></button><button aria-label="Banner 4"></button>
-  </div>
+  <button class="hero-btn prev" aria-label="Banner anterior">‹</button><button class="hero-btn next" aria-label="Próximo banner">›</button>
+  <div class="hero-dots"><button class="active" aria-label="Banner 1"></button><button aria-label="Banner 2"></button><button aria-label="Banner 3"></button><button aria-label="Banner 4"></button></div>
 </section>
 
-<section class="developers section">
-  <div class="section-title"><span>NOSSO TIME</span><h2>Desenvolvedores</h2><p>Conheça os profissionais e suas áreas de atuação.</p></div>
-  <div class="dev-carousel">
-    <button class="dev-btn dev-prev" aria-label="Desenvolvedor anterior">‹</button>
-    <div class="dev-window">
-      <div class="dev-track" id="devTrack">
-        <article class="dev-card"><div class="dev-photo photo1"><img src="https://i.pravatar.cc/600?img=1" alt="Foto demonstrativa do Desenvolvedor 01" loading="lazy"><span class="dev-number">01</span></div><h3>Desenvolvedor 01</h3><p>Desenvolvimento Web</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 01')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo2"><img src="https://i.pravatar.cc/600?img=2" alt="Foto demonstrativa do Desenvolvedor 02" loading="lazy"><span class="dev-number">02</span></div><h3>Desenvolvedor 02</h3><p>Backend / Python</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 02')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo3"><img src="https://i.pravatar.cc/600?img=3" alt="Foto demonstrativa do Desenvolvedor 03" loading="lazy"><span class="dev-number">03</span></div><h3>Desenvolvedor 03</h3><p>Frontend / UI</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 03')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo4"><img src="https://i.pravatar.cc/600?img=4" alt="Foto demonstrativa do Desenvolvedor 04" loading="lazy"><span class="dev-number">04</span></div><h3>Desenvolvedor 04</h3><p>Mobile</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 04')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo5"><img src="https://i.pravatar.cc/600?img=5" alt="Foto demonstrativa do Desenvolvedor 05" loading="lazy"><span class="dev-number">05</span></div><h3>Desenvolvedor 05</h3><p>Banco de Dados</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 05')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo6"><img src="https://i.pravatar.cc/600?img=6" alt="Foto demonstrativa do Desenvolvedor 06" loading="lazy"><span class="dev-number">06</span></div><h3>Desenvolvedor 06</h3><p>DevOps / Cloud</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 06')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo7"><img src="https://i.pravatar.cc/600?img=7" alt="Foto demonstrativa do Desenvolvedor 07" loading="lazy"><span class="dev-number">07</span></div><h3>Desenvolvedor 07</h3><p>UI/UX Design</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 07')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo8"><img src="https://i.pravatar.cc/600?img=8" alt="Foto demonstrativa do Desenvolvedor 08" loading="lazy"><span class="dev-number">08</span></div><h3>Desenvolvedor 08</h3><p>Inteligência Artificial</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 08')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo9"><img src="https://i.pravatar.cc/600?img=9" alt="Foto demonstrativa do Desenvolvedor 09" loading="lazy"><span class="dev-number">09</span></div><h3>Desenvolvedor 09</h3><p>Full Stack</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 09')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo10"><img src="https://i.pravatar.cc/600?img=10" alt="Foto demonstrativa do Desenvolvedor 10" loading="lazy"><span class="dev-number">10</span></div><h3>Desenvolvedor 10</h3><p>PHP / Web</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 10')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo11"><img src="https://i.pravatar.cc/600?img=11" alt="Foto demonstrativa do Desenvolvedor 11" loading="lazy"><span class="dev-number">11</span></div><h3>Desenvolvedor 11</h3><p>Aplicações Desktop</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 11')">Ver currículo ↗</a></article>
-        <article class="dev-card"><div class="dev-photo photo12"><img src="https://i.pravatar.cc/600?img=12" alt="Foto demonstrativa do Desenvolvedor 12" loading="lazy"><span class="dev-number">12</span></div><h3>Desenvolvedor 12</h3><p>Automação / IA</p><a href="#" onclick="return demoCV(event,'Desenvolvedor 12')">Ver currículo ↗</a></article>
-      </div>
-    </div>
-    <button class="dev-btn dev-next" aria-label="Próximo desenvolvedor">›</button>
-  </div>
-  <div class="dev-progress"><span id="devProgress"></span></div>
+<section class="developers section" id="equipe">
+  <div class="section-title"><span>NOSSO TIME</span><h2>Desenvolvedores</h2><p>Conheça os integrantes. Clique na foto ou no currículo para abrir o portfólio individual.</p></div>
+  <div class="dev-grid" id="devGrid"></div>
 </section>
 
 <section class="section" id="projetos">
   <div class="section-title"><span>PORTFÓLIO</span><h2>Projetos</h2><p>Exemplos demonstrativos de soluções que podem ser desenvolvidas pela equipe.</p></div>
   <div class="project-grid">
-    <article class="project-card"><div class="project-image"><img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=900&q=80" alt="Interface de portal corporativo" loading="lazy"></div><span>01 • WEB</span><h3>Portal Corporativo</h3><p>Site institucional responsivo com navegação, componentes reutilizáveis e formulário de contato.</p><a href="#contato">Conhecer projeto →</a></article>
-    <article class="project-card"><div class="project-image"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80" alt="Dashboard de sistema de gestão" loading="lazy"></div><span>02 • SISTEMAS</span><h3>Gestão Escolar</h3><p>Sistema demonstrativo para turmas, salas, reservas, usuários e acompanhamento acadêmico.</p><a href="#contato">Conhecer projeto →</a></article>
-    <article class="project-card"><div class="project-image"><img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=900&q=80" alt="Conceito visual de inteligência artificial" loading="lazy"></div><span>03 • IA</span><h3>Assistente Inteligente</h3><p>Conceito de aplicação com automação, análise de dados e recursos de Inteligência Artificial.</p><a href="#contato">Conhecer projeto →</a></article>
+    <article class="project-card"><div class="project-image"><img src="assets/projetos/projeto-web.svg" alt="Imagem demonstrativa de um portal web"></div><span>01 • WEB</span><h3>Portal Corporativo</h3><p>Site institucional responsivo com navegação, componentes reutilizáveis e formulário de contato.</p><a href="#contato">Conhecer projeto →</a></article>
+    <article class="project-card"><div class="project-image"><img src="assets/projetos/projeto-escolar.svg" alt="Imagem demonstrativa de um sistema de gestão escolar"></div><span>02 • SISTEMAS</span><h3>Gestão Escolar</h3><p>Sistema demonstrativo para turmas, salas, reservas, usuários e acompanhamento acadêmico.</p><a href="#contato">Conhecer projeto →</a></article>
+    <article class="project-card"><div class="project-image"><img src="assets/projetos/projeto-ia.svg" alt="Imagem demonstrativa de um painel de inteligência artificial"></div><span>03 • IA</span><h3>Assistente Inteligente</h3><p>Conceito de aplicação com automação, análise de dados e recursos de Inteligência Artificial.</p><a href="#contato">Conhecer projeto →</a></article>
   </div>
 </section>
 
-<section class="section" id="galeria">
-  <div class="section-title"><span>SHOWCASE</span><h2>Galeria</h2><p>Uma seleção visual demonstrativa do universo de desenvolvimento.</p></div>
-  <div class="gallery-grid">
-    <div class="gallery-item"><div class="gallery-art ga1"><img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=1000&q=80" alt="Notebook com código em ambiente de desenvolvimento" loading="lazy"><span>01</span><b>CODE</b></div><h3>Ambiente de Desenvolvimento</h3></div>
-    <div class="gallery-item"><div class="gallery-art ga2"><img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=1000&q=80" alt="Interface web em tela de computador" loading="lazy"><span>&lt;/&gt;</span><b>WEB</b></div><h3>Interfaces Web</h3></div>
-    <div class="gallery-item"><div class="gallery-art ga3"><img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=1000&q=80" alt="Conceito tecnológico de inteligência artificial" loading="lazy"><span>AI</span><b>INTELLIGENCE</b></div><h3>Inteligência Artificial</h3></div>
-    <div class="gallery-item"><div class="gallery-art ga4"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1000&q=80" alt="Servidores e infraestrutura de dados" loading="lazy"><span>DB</span><b>DATA</b></div><h3>Dados e Sistemas</h3></div>
-    <div class="gallery-item"><div class="gallery-art ga5"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80" alt="Aplicação mobile em smartphone" loading="lazy"><span>APP</span><b>MOBILE</b></div><h3>Aplicações Mobile</h3></div>
-    <div class="gallery-item"><div class="gallery-art ga6"><img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?auto=format&fit=crop&w=1000&q=80" alt="Prototipação de interface e experiência do usuário" loading="lazy"><span>UX</span><b>DESIGN</b></div><h3>UI/UX e Prototipação</h3></div>
-  </div>
-</section>
+<section class="section" id="galeria"><div class="section-title"><span>SHOWCASE</span><h2>Galeria</h2><p>Imagens demonstrativas para apresentar as áreas e projetos da equipe.</p></div><div class="gallery-grid">
+<div class="gallery-item"><div class="gallery-art"><img src="assets/galeria/galeria-codigo.svg" alt="Código em editor"></div><h3>Ambiente de Desenvolvimento</h3></div>
+<div class="gallery-item"><div class="gallery-art"><img src="assets/galeria/galeria-web.svg" alt="Interface web demonstrativa"></div><h3>Interfaces Web</h3></div>
+<div class="gallery-item"><div class="gallery-art"><img src="assets/galeria/galeria-ia.svg" alt="Inteligência artificial demonstrativa"></div><h3>Inteligência Artificial</h3></div>
+<div class="gallery-item"><div class="gallery-art"><img src="assets/galeria/galeria-dados.svg" alt="Banco de dados demonstrativo"></div><h3>Dados e Sistemas</h3></div>
+<div class="gallery-item"><div class="gallery-art"><img src="assets/galeria/galeria-mobile.svg" alt="Aplicação mobile demonstrativa"></div><h3>Aplicações Mobile</h3></div>
+<div class="gallery-item"><div class="gallery-art"><img src="assets/galeria/galeria-ux.svg" alt="Prototipação de interface"></div><h3>UI/UX e Prototipação</h3></div>
+</div></section>
 
-<section class="about" id="sobre">
-  <div class="about-inner">
-    <div><span class="eyebrow">SOBRE NÓS</span><h2>Ideias locais.<br><span>Tecnologia sem limites.</span></h2></div>
-    <div><p>Somos um grupo de desenvolvedores em formação, reunidos em Corumbá/MS, com foco em transformar conhecimento em projetos práticos.</p><p>Trabalhamos de forma colaborativa em desenvolvimento web, sistemas, aplicações desktop e mobile, bancos de dados, design de interfaces e Inteligência Artificial.</p><div class="stats"><div><b>12</b><small>Desenvolvedores</small></div><div><b>4+</b><small>Trilhas</small></div><div><b>∞</b><small>Ideias</small></div></div></div>
-  </div>
-</section>
+<section class="about" id="sobre"><div class="about-inner"><div><span class="eyebrow">SOBRE NÓS</span><h2>Ideias locais.<br><span>Tecnologia sem limites.</span></h2></div><div><p>Somos um grupo de desenvolvedores em formação, reunidos em Corumbá/MS, com foco em transformar conhecimento em projetos práticos.</p><p>Trabalhamos de forma colaborativa em desenvolvimento web, sistemas, aplicações desktop e mobile, bancos de dados, design de interfaces e Inteligência Artificial.</p><div class="stats"><div><b>12</b><small>Desenvolvedores</small></div><div><b>4+</b><small>Trilhas</small></div><div><b>∞</b><small>Ideias</small></div></div></div></div></section>
 
-<section class="contact section" id="contato">
-  <div class="contact-copy"><span class="eyebrow">FALE CONOSCO</span><h2>Vamos criar algo<br><span>juntos?</span></h2><p>Envie uma mensagem para nossa equipe. O formulário está preparado para envio por PHP.</p><div class="contact-line">✉ <span>Contato por e-mail</span></div><div class="contact-line">⌖ <span>Corumbá • Mato Grosso do Sul</span></div></div>
-  <form class="contact-form" action="enviar.php" method="POST">
-    <div class="input-row"><input type="text" name="nome" placeholder="Seu nome" required><input type="email" name="email" placeholder="Seu e-mail" required></div>
-    <input type="text" name="assunto" placeholder="Assunto" required>
-    <textarea name="mensagem" rows="7" placeholder="Digite sua mensagem..." required></textarea>
-    <button type="submit">ENVIAR MENSAGEM <span>→</span></button>
-    <small>Configure o endereço de destino em <code>enviar.php</code> antes de publicar.</small>
-  </form>
-</section>
+<section class="contact section" id="contato"><div class="contact-copy"><span class="eyebrow">FALE CONOSCO</span><h2>Vamos criar algo<br><span>juntos?</span></h2><p>Envie uma mensagem para nossa equipe. O formulário está preparado para integração com o envio por PHP na publicação.</p><div class="contact-line">✉ <span>Contato por e-mail</span></div><div class="contact-line">⌖ <span>Corumbá • Mato Grosso do Sul</span></div></div><form class="contact-form" action="index.php" method="POST"><div class="input-row"><input type="text" name="nome" placeholder="Seu nome" required><input type="email" name="email" placeholder="Seu e-mail" required></div><input type="text" name="assunto" placeholder="Assunto" required><textarea name="mensagem" rows="7" placeholder="Digite sua mensagem..." required></textarea><button type="submit">ENVIAR MENSAGEM <span>→</span></button><small>Na versão publicada, o formulário será processado pelo arquivo PHP.</small></form></section>
 </main>
-
-<footer>
-  <div class="footer-content"><div class="footer-logo">&lt;/&gt; <b>DESENVOLVEDORES<br>CORUMBÁ</b></div><p>Conectando pessoas, código e inovação.</p><div class="footer-social"><span>GH</span><span>in</span><span>◎</span></div></div>
-  <div class="copyright">@SENACALUNOSCBDESENVOLVEDORESDESISTEMAS</div>
-</footer>
-
+<footer><div class="footer-content"><div class="footer-logo">&lt;/&gt; <b>DESENVOLVEDORES<br>CORUMBÁ</b></div><p>Conectando pessoas, código e inovação.</p><div class="footer-social"><span>GH</span><span>in</span><span>◎</span></div></div><div class="copyright">@SENACALUNOSCBDESENVOLVEDORESDESISTEMAS</div></footer>
 <script src="script.js"></script>
-</body>
-</html>
+</body></html>
