@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Família Sem Piolho: Missão Cabeça Limpa</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            fredoka: ['Fredoka', 'sans-serif'],
+            nunito: ['Nunito', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              teal: '#0D9488',
+              sky: '#0284C7',
+              amber: '#D97706',
+              purple: '#7C3AED',
+              rose: '#E11D48',
+              green: '#16A34A',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 50%, #fef3c7 100%);
+      min-height: 100vh;
+      user-select: none;
+    }
+
+    .font-heading {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(13, 148, 136, 0.4);
+      border-radius: 10px;
+    }
+
+    /* Dice Animation */
+    .dice-rolling {
+      animation: spinDice 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes spinDice {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.15); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    /* Board Tile Styling */
+    .tile-card {
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .tile-card:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    /* Player Pawn Animations */
+    .pawn {
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));
+    }
+    .pawn-active {
+      animation: bouncePawn 1s infinite alternate;
+    }
+    @keyframes bouncePawn {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+
+    /* Pulse effect */
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(13, 148, 136, 0.5); }
+      50% { box-shadow: 0 0 30px rgba(13, 148, 136, 0.9); }
+    }
+  </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen">
+
+  <script>
+    // Audio Synthesizer (No external audio files needed)
+    class SoundEffects {
+      constructor() {
+        this.ctx = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playTone(freq, type = 'sine', duration = 0.1, gainValue = 0.1) {
+        if (!this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(gainValue, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      playDiceRoll() {
+        this.init();
+        let count = 0;
+        const interval = setInterval(() => {
+          this.playTone(200 + Math.random() * 400, 'triangle', 0.05, 0.08);
+          count++;
+          if (count > 8) clearInterval(interval);
+        }, 60);
+      }
+
+      playSuccess() {
+        this.init();
+        const now = this.ctx ? this.ctx.currentTime : 0;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+          setTimeout(() => this.playTone(freq, 'sine', 0.2, 0.12), idx * 100);
+        });
+      }
+
+      playFail() {
+        this.init();
+        [300, 260, 220].forEach((freq, idx) => {
+          setTimeout(() => this.playTone(freq, 'sawtooth', 0.15, 0.08), idx * 120);
+        });
+      }
+
+      playPop() {
+        this.init();
+        this.playTone(600 + Math.random() * 200, 'sine', 0.05, 0.1);
+      }
+
+      playVictory() {
+        this.init();
+        const notes = [440, 554.37, 659.25, 880, 659.25, 880];
+        const times = [0, 150, 300, 450, 650, 850];
+        notes.forEach((freq, idx) => {
+          setTimeout(() => this.playTone(freq, 'triangle', 0.25, 0.15), times[idx]);
+        });
+      }
+    }
+
+    const soundFX = new SoundEffects();
+  </script>
+
+  <!-- Top Navigation Header -->
+  <header class="bg-white/80 backdrop-blur-md border-b border-teal-100 sticky top-0 z-30 px-4 py-3 shadow-sm">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-xl shadow-md font-heading font-bold">
+          <i class="fa-solid fa-shield-virus"></i>
+        </div>
+        <div>
+          <h1 class="font-heading font-bold text-lg md:text-xl text-teal-900 leading-tight">Família Sem Piolho</h1>
+          <p class="text-xs text-teal-600 font-semibold hidden sm:block">Missão Cabeça Limpa & Prevenção em Família</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btn-sound-toggle" onclick="toggleSound()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition flex items-center gap-2">
+          <i id="sound-icon" class="fa-solid fa-volume-high text-teal-600"></i>
+          <span class="hidden sm:inline">Som: On</span>
+        </button>
+        <button onclick="showHelpModal()" class="px-3 py-1.5 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs sm:text-sm font-semibold transition flex items-center gap-2 border border-teal-200">
+          <i class="fa-solid fa-circle-question text-teal-600"></i>
+          <span>Como Jogar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-6 flex flex-col justify-center">
+
+    <!-- SCREEN 1: PLAYER SETUP -->
+    <section id="setup-screen" class="w-full max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-teal-100 my-auto">
+      <div class="text-center mb-8">
+        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Jogo Educativo Familiar</span>
+        <h2 class="font-heading font-bold text-2xl sm:text-4xl text-slate-800 mt-2 mb-2">Boas-vindas à Missão!</h2>
+        <p class="text-slate-600 text-sm sm:text-base">Cadastre de 2 a 4 jogadores da sua família para começar o tabuleiro de hábitos saudáveis e combate à pediculose.</p>
+      </div>
+
+      <!-- Player Count Selection -->
+      <div class="mb-6">
+        <label class="block font-heading font-semibold text-slate-700 mb-2">Quantos membros vão jogar?</label>
+        <div class="grid grid-cols-3 gap-3">
+          <button type="button" onclick="setPlayerCount(2)" id="btn-count-2" class="btn-player-count py-3 rounded-2xl border-2 border-teal-500 bg-teal-50 text-teal-800 font-bold font-heading text-lg transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-user-group"></i> 2 Jogadores
+          </button>
+          <button type="button" onclick="setPlayerCount(3)" id="btn-count-3" class="btn-player-count py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 hover:border-teal-300 font-bold font-heading text-lg transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-users"></i> 3 Jogadores
+          </button>
+          <button type="button" onclick="setPlayerCount(4)" id="btn-count-4" class="btn-player-count py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 hover:border-teal-300 font-bold font-heading text-lg transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-house-user"></i> 4 Jogadores
+          </button>
+        </div>
+      </div>
+
+      <!-- Player Inputs Container -->
+      <div id="player-inputs" class="space-y-4 mb-8">
+        <!-- Rendered dynamically via JS -->
+      </div>
+
+      <button onclick="startGame()" class="w-full py-4 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xl shadow-lg shadow-teal-600/30 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3">
+        <i class="fa-solid fa-play"></i> Começar o Jogo!
+      </button>
+    </section>
+
+    <!-- SCREEN 2: MAIN BOARD GAME -->
+    <section id="game-screen" class="hidden flex-col gap-6 w-full">
+      
+      <!-- Top Status Bar & Turn Info -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center bg-white p-4 sm:p-5 rounded-3xl shadow-md border border-teal-100">
+        
+        <!-- Current Turn Badge -->
+        <div class="flex items-center gap-3">
+          <div id="current-player-avatar" class="w-12 h-12 rounded-2xl bg-teal-500 text-white flex items-center justify-center text-2xl shadow-md">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Vez de Jogar:</span>
+            <h3 id="current-player-name" class="font-heading font-bold text-xl text-slate-800 leading-tight">Jogador 1</h3>
+            <p id="current-player-status" class="text-xs text-teal-600 font-semibold">Role o dado para avançar!</p>
+          </div>
+        </div>
+
+        <!-- Dice Roll Controller -->
+        <div class="flex items-center justify-center gap-4 py-2 md:py-0 border-y md:border-y-0 md:border-x border-slate-100">
+          <div id="dice-container" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 text-white flex items-center justify-center text-3xl font-heading font-bold shadow-lg border-2 border-white">
+            <i class="fa-solid fa-dice-d6"></i>
+          </div>
+          <div>
+            <button id="btn-roll-dice" onclick="rollDice()" class="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-heading font-bold text-lg shadow-md shadow-amber-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2">
+              <i class="fa-solid fa-dice"></i> Rolar Dado
+            </button>
+            <p id="dice-message" class="text-xs text-slate-500 text-center mt-1">Avança de 1 a 6 casas</p>
+          </div>
+        </div>
+
+        <!-- Leaderboard Summary Box -->
+        <div class="flex items-center justify-around sm:justify-end gap-2" id="mini-scoreboard">
+          <!-- Populated by JS -->
+        </div>
+
+      </div>
+
+      <!-- Main Board Track Container -->
+      <div class="bg-white/90 backdrop-blur-sm p-4 sm:p-6 rounded-3xl shadow-xl border border-teal-100 overflow-x-auto">
+        <div class="flex items-center justify-between mb-4 px-2">
+          <h3 class="font-heading font-bold text-lg text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-route text-teal-600"></i> Caminho da Prevenção da Família
+          </h3>
+          <span class="text-xs bg-teal-100 text-teal-800 font-bold px-3 py-1 rounded-full">24 Casas Educativas</span>
+        </div>
+
+        <!-- Responsive Flex/Grid Track for 24 tiles -->
+        <div id="board-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 min-w-[700px] p-2">
+          <!-- Board tiles injected by JS -->
+        </div>
+      </div>
+
+      <!-- Action Log Panel -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-3">
+        <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-bullhorn"></i>
+        </div>
+        <div class="text-xs sm:text-sm text-slate-600 flex-grow" id="game-log">
+          O jogo começou! Quem chegar à casa 24 em primeiro lidera a família na prevenção!
+        </div>
+      </div>
+
+    </section>
+
+    <!-- SCREEN 3: WINNER / LEADERBOARD END SCREEN -->
+    <section id="winner-screen" class="hidden w-full max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-teal-100 my-auto text-center">
+      <div class="w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-4xl mb-4 shadow-inner">
+        <i class="fa-solid fa-trophy"></i>
+      </div>
+      <h2 class="font-heading font-bold text-3xl sm:text-4xl text-slate-800 mb-2">Missão Cumprida!</h2>
+      <p class="text-slate-600 text-sm sm:text-base mb-6">Toda a família aprendeu sobre como prevenir o piolho e manter a cabeça limpa e saudável!</p>
+
+      <!-- Podium list -->
+      <div id="final-podium" class="space-y-3 mb-8">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Family Educational Certificate Banner -->
+      <div class="bg-teal-50 border border-teal-200 p-4 rounded-2xl text-left text-xs sm:text-sm text-teal-900 mb-6 space-y-1">
+        <p class="font-bold flex items-center gap-2 text-teal-800"><i class="fa-solid fa-heart text-rose-500"></i> Dica de Ouro para a Família:</p>
+        <p>Ter piolho não é falta de higiene! É algo comum na infância. Checar o cabelo com pente fino semanalmente e não compartilhar escovas e bonés é o melhor remédio.</p>
+      </div>
+
+      <button onclick="resetGame()" class="w-full py-4 rounded-2xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-xl shadow-lg transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-rotate-right"></i> Jogar Novamente
+      </button>
+    </section>
+
+  </main>
+
+  <!-- MODAL CONTAINER (Shared Overlay) -->
+  <div id="modal-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    
+    <!-- 1. EVENT CARD MODAL (Luck/Misfortune/Tips) -->
+    <div id="modal-event" class="hidden bg-white max-w-md w-full rounded-3xl p-6 shadow-2xl text-center border border-teal-100">
+      <div id="event-icon-bg" class="w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl mb-4">
+        <i id="event-icon" class="fa-solid fa-star"></i>
+      </div>
+      <h3 id="event-title" class="font-heading font-bold text-2xl text-slate-800 mb-2">Atitude de Prevenção</h3>
+      <p id="event-description" class="text-slate-600 text-sm sm:text-base mb-6">Descrição da atitude...</p>
+      <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-lg shadow-md transition">
+        Continuar
+      </button>
+    </div>
+
+    <!-- 2. QUIZ MODAL (Myth vs Truth) -->
+    <div id="modal-quiz" class="hidden bg-white max-w-lg w-full rounded-3xl p-6 shadow-2xl border border-teal-100">
+      <div class="flex items-center justify-between mb-4">
+        <span class="bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+          <i class="fa-solid fa-brain"></i> Quiz: Mito ou Verdade?
+        </span>
+        <span id="quiz-points-badge" class="text-xs font-bold text-slate-400">+20 pontos</span>
+      </div>
+
+      <h3 id="quiz-question" class="font-heading font-bold text-xl text-slate-800 mb-6">
+        O piolho consegue pular e voar de uma cabeça para outra?
+      </h3>
+
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <button onclick="answerQuiz(true)" class="py-4 px-3 rounded-2xl border-2 border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 font-heading font-bold text-lg text-slate-700 hover:text-emerald-800 transition flex flex-col items-center gap-1">
+          <i class="fa-solid fa-circle-check text-2xl text-emerald-500"></i>
+          <span>VERDADE</span>
+        </button>
+        <button onclick="answerQuiz(false)" class="py-4 px-3 rounded-2xl border-2 border-slate-200 hover:border-rose-500 hover:bg-rose-50 font-heading font-bold text-lg text-slate-700 hover:text-rose-800 transition flex flex-col items-center gap-1">
+          <i class="fa-solid fa-circle-xmark text-2xl text-rose-500"></i>
+          <span>MITO</span>
+        </button>
+      </div>
+
+      <!-- Quiz Explanation Feedback -->
+      <div id="quiz-feedback" class="hidden p-4 rounded-2xl bg-slate-50 mb-6 text-sm">
+        <p id="quiz-result-title" class="font-bold text-base mb-1"></p>
+        <p id="quiz-explanation" class="text-slate-600"></p>
+      </div>
+
+      <button id="btn-quiz-continue" onclick="closeModal()" class="hidden w-full py-3 rounded-xl bg-teal-600 text-white font-heading font-bold text-lg transition">
+        Continuar no Tabuleiro
+      </button>
+    </div>
+
+    <!-- 3. MINI-GAME 1: Fine-Tooth Comb Lice Search (Canvas Arcade) -->
+    <div id="modal-comb-game" class="hidden bg-white max-w-xl w-full rounded-3xl p-6 shadow-2xl border border-teal-100 text-center">
+      <div class="flex items-center justify-between mb-3">
+        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+          <i class="fa-solid fa-gamepad"></i> Minijogo Arcade
+        </span>
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-bold text-slate-500">Tempo: <strong id="comb-timer" class="text-rose-600 text-base">12s</strong></span>
+          <span class="text-xs font-bold text-slate-500">Capturados: <strong id="comb-score" class="text-amber-600 text-base">0</strong>/5</span>
+        </div>
+      </div>
+
+      <h3 class="font-heading font-bold text-xl text-slate-800 mb-1">Caça ao Piolho com Pente Fino!</h3>
+      <p class="text-xs text-slate-500 mb-3">Passe o pente fino (clique/toque) nos piolhos para limpá-los do cabelo antes que o tempo acabe!</p>
+
+      <!-- Arcade Canvas Container -->
+      <div class="relative w-full aspect-[5/3] bg-amber-50 rounded-2xl overflow-hidden border-2 border-amber-200 cursor-crosshair mb-4 shadow-inner">
+        <canvas id="comb-canvas" class="w-full h-full"></canvas>
+      </div>
+
+      <div id="comb-instructions" class="text-xs text-slate-600 mb-4">
+        Objetivo: Encontre e remova pelo menos 5 piolhos/lêndeas!
+      </div>
+
+      <button id="btn-start-comb" onclick="startCombMiniGame()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-heading font-bold text-lg transition">
+        <i class="fa-solid fa-play"></i> Começar Desafio!
+      </button>
+      <button id="btn-comb-finish" onclick="finishCombMiniGame()" class="hidden w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-heading font-bold text-lg transition">
+        Continuar
+      </button>
+    </div>
+
+    <!-- 4. MINI-GAME 2: Item Sorting (Atitudes & Objetos Pessoais) -->
+    <div id="modal-sort-game" class="hidden bg-white max-w-lg w-full rounded-3xl p-6 shadow-2xl border border-teal-100">
+      <div class="flex items-center justify-between mb-3">
+        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+          <i class="fa-solid fa-layer-group"></i> Classificador de Objetos
+        </span>
+        <span class="text-xs font-bold text-slate-500">Restantes: <strong id="sort-remaining" class="text-teal-600 text-base">4</strong></span>
+      </div>
+
+      <h3 class="font-heading font-bold text-xl text-slate-800 mb-1 text-center">Pode Compartilhar ou É Pessoal?</h3>
+      <p class="text-xs text-slate-500 mb-4 text-center">Clique no item e escolha a categoria correta!</p>
+
+      <!-- Current Active Item Card -->
+      <div id="sort-item-card" class="bg-slate-50 border-2 border-dashed border-teal-300 rounded-2xl p-6 text-center mb-6 transition">
+        <div id="sort-item-icon" class="text-5xl text-teal-600 mb-2">
+          <i class="fa-solid fa-hat-cowboy"></i>
+        </div>
+        <h4 id="sort-item-title" class="font-heading font-bold text-lg text-slate-800">Boné de Praia</h4>
+      </div>
+
+      <!-- Category Decision Buttons -->
+      <div id="sort-buttons" class="grid grid-cols-2 gap-4 mb-4">
+        <button onclick="classifyItem('personal')" class="p-4 rounded-2xl bg-rose-50 hover:bg-rose-100 border-2 border-rose-200 text-rose-800 font-heading font-bold text-sm transition flex flex-col items-center gap-2">
+          <i class="fa-solid fa-user-lock text-2xl text-rose-600"></i>
+          <span>USO PESSOAL<br/><span class="text-[10px] font-normal text-rose-600">(Não compartilhar)</span></span>
+        </button>
+        <button onclick="classifyItem('shareable')" class="p-4 rounded-2xl bg-emerald-50 hover:bg-emerald-100 border-2 border-emerald-200 text-emerald-800 font-heading font-bold text-sm transition flex flex-col items-center gap-2">
+          <i class="fa-solid fa-people-arrows text-2xl text-emerald-600"></i>
+          <span>PODE COMPARTILHAR<br/><span class="text-[10px] font-normal text-emerald-600">(Sem risco)</span></span>
+        </button>
+      </div>
+
+      <div id="sort-feedback" class="hidden p-3 rounded-xl bg-slate-100 text-xs text-center font-semibold mb-4"></div>
+
+      <button id="btn-sort-continue" onclick="closeModal()" class="hidden w-full py-3 rounded-xl bg-teal-600 text-white font-heading font-bold text-lg transition">
+        Continuar
+      </button>
+    </div>
+
+    <!-- 5. HELP / HOW TO PLAY MODAL -->
+    <div id="modal-help" class="hidden bg-white max-w-lg w-full rounded-3xl p-6 shadow-2xl border border-teal-100">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-heading font-bold text-xl text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-teal-600"></i> Regras do Jogo
+        </h3>
+        <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="space-y-3 text-xs sm:text-sm text-slate-600 mb-6 max-h-[60vh] overflow-y-auto pr-2">
+        <div class="p-3 rounded-2xl bg-teal-50 border border-teal-100">
+          <strong class="text-teal-900 block mb-1 font-heading text-base"><i class="fa-solid fa-dice"></i> 1. Sistema de Turnos:</strong>
+          Cada membro da família joga na sua vez rolando o dado e avançando pelo caminho.
+        </div>
+        <div class="p-3 rounded-2xl bg-amber-50 border border-amber-100">
+          <strong class="text-amber-900 block mb-1 font-heading text-base"><i class="fa-solid fa-shield-halved"></i> 2. Casas do Tabuleiro:</strong>
+          <ul class="list-disc list-inside space-y-1 mt-1">
+            <li><strong>Atitudes Corretas:</strong> Avançam você e dão pontos de prevenção.</li>
+            <li><strong>Hábitos Incorretos:</strong> Fazem você voltar casas.</li>
+            <li><strong>Quizzes (Mitos vs. Verdades):</strong> Responda certo para ganhar pontos extras!</li>
+            <li><strong>Minijogos (Pente Fino / Classificador):</strong> Teste sua rapidez para somar bônus!</li>
+          </ul>
+        </div>
+        <div class="p-3 rounded-2xl bg-purple-50 border border-purple-100">
+          <strong class="text-purple-900 block mb-1 font-heading text-base"><i class="fa-solid fa-trophy"></i> 3. Vitória & Medalhas:</strong>
+          O primeiro a atingir a casa final encerra a partida. O placar final calcula quem acumulou mais pontos de hábitos preventivos e concede medalhas como "Mestre do Pente Fino"!
+        </div>
+      </div>
+      <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-teal-600 text-white font-heading font-bold text-lg shadow-md transition">
+        Entendi! Vamos Jogar
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    /* ==========================================================================
+       GAME DATA STRUCTURES & CONFIGURATION
+       ========================================================================== */
+
+    // Avatar options available for players
+    const AVATAR_PRESETS = [
+      { icon: 'fa-cat', color: '#0D9488', bgClass: 'bg-teal-600', label: 'Gatinho' },
+      { icon: 'fa-dog', color: '#0284C7', bgClass: 'bg-sky-600', label: 'Cãozinho' },
+      { icon: 'fa-fox-paw', iconFallback: 'fa-paw', color: '#D97706', bgClass: 'bg-amber-600', label: 'Raposa' },
+      { icon: 'fa-frog', color: '#16A34A', bgClass: 'bg-green-600', label: 'Sapo' },
+      { icon: 'fa-bear-claw', iconFallback: 'fa-shield-heart', color: '#7C3AED', bgClass: 'bg-purple-600', label: 'Ursinho' },
+    ];
+
+    // Board layout definition (24 spaces total)
+    const BOARD_TILES = [
+      { id: 0, title: 'Início', type: 'start', icon: 'fa-house-user', color: 'bg-slate-700', desc: 'Ponto de partida da família!' },
+      { id: 1, title: 'Cabelo Preso', type: 'good', icon: 'fa-scissors', delta: 1, points: 10, desc: 'Usou cabelo preso para ir à escola. Muito bem! Avança 1 casa.' },
+      { id: 2, title: 'Quiz Saúde', type: 'quiz', icon: 'fa-brain', points: 15, desc: 'Hora de responder um desafio sobre piolhos!' },
+      { id: 3, title: 'Emprestou Boné', type: 'bad', icon: 'fa-hat-cowboy', delta: -1, points: -5, desc: 'Compartilhou o boné com o colega. Ops! Volte 1 casa.' },
+      { id: 4, title: 'Pente Fino!', type: 'comb_game', icon: 'fa-bug-slash', points: 25, desc: 'Minijogo: Use o pente fino para capturar os piolhos!' },
+      { id: 5, title: 'Checagem Semanal', type: 'good', icon: 'fa-magnifying-glass', delta: 2, points: 20, desc: 'Mamãe/Papai checou a cabeça no fim de semana. Avança 2 casas!' },
+      { id: 6, title: 'Troca de Escova', type: 'bad', icon: 'fa-broom', delta: -1, points: -5, desc: 'Usou a escova de cabelo do colega no vestiário. Volte 1 casa.' },
+      { id: 7, title: 'Organizador', type: 'sort_game', icon: 'fa-boxes-stacked', points: 20, desc: 'Minijogo: Separe os objetos de uso pessoal!' },
+      { id: 8, title: 'Quiz Saúde', type: 'quiz', icon: 'fa-brain', points: 15, desc: 'Pergunta rápida sobre mitos e verdades!' },
+      { id: 9, title: 'Mochilas Juntas', type: 'bad', icon: 'fa-bag-shopping', delta: -1, points: -5, desc: 'Pendurou o casaco na mesma arara lotada sem guardar na bolsa. Volte 1 casa.' },
+      { id: 10, title: 'Aviso Cidadão', type: 'good', icon: 'fa-comment-medical', delta: 2, points: 25, desc: 'Avisou a professora ao notar coceira para ajudar os colegas. Avança 2 casas!' },
+      { id: 11, title: 'Pente Fino!', type: 'comb_game', icon: 'fa-bug-slash', points: 25, desc: 'Minijogo: Ação rápida de prevenção com pente fino!' },
+      { id: 12, title: 'Super Sorte', type: 'good', icon: 'fa-clover', delta: 1, points: 15, desc: 'Lavou a toalha de banho com água quente. Avança 1 casa!' },
+      { id: 13, title: 'Quiz Saúde', type: 'quiz', icon: 'fa-brain', points: 15, desc: 'Desafio educativo para a família!' },
+      { id: 14, title: 'Fone Emprestado', type: 'bad', icon: 'fa-headphones', delta: -2, points: -10, desc: 'Emprestou o fone de ouvido arco (headphone). Volte 2 casas.' },
+      { id: 15, title: 'Organizador', type: 'sort_game', icon: 'fa-boxes-stacked', points: 20, desc: 'Minijogo: Classifique as atitudes corretas!' },
+      { id: 16, title: 'Tiara Própria', type: 'good', icon: 'fa-ribbon', delta: 1, points: 10, desc: 'Usou apenas seus próprios acessórios de cabelo. Avança 1 casa!' },
+      { id: 17, title: 'Quiz Saúde', type: 'quiz', icon: 'fa-brain', points: 15, desc: 'Mito ou Verdade sobre tratamentos?' },
+      { id: 18, title: 'Pente Fino!', type: 'comb_game', icon: 'fa-bug-slash', points: 25, desc: 'Minijogo: Limpeza preventiva rápida!' },
+      { id: 19, title: 'Esqueceu de Olhar', type: 'bad', icon: 'fa-eye-slash', delta: -1, points: -5, desc: 'Esqueceu de olhar atrás da orelha na checagem. Volte 1 casa.' },
+      { id: 20, title: 'Capacete Limpo', type: 'good', icon: 'fa-helmet-safety', delta: 2, points: 20, desc: 'Higienizou o capacete de bicicleta. Avança 2 casas!' },
+      { id: 21, title: 'Quiz Final', type: 'quiz', icon: 'fa-brain', points: 20, desc: 'Última pergunta do saber!' },
+      { id: 22, title: 'Atitude Nota 10', type: 'good', icon: 'fa-award', delta: 1, points: 15, desc: 'Explicou aos amigos que piolho não é vergonha! Avança 1 casa.' },
+      { id: 23, title: 'CHEGADA!', type: 'finish', icon: 'fa-flag-checkered', points: 50, desc: 'Parabéns! Você concluiu a Missão Cabeça Limpa!' }
+    ];
+
+    // Quiz Questions Bank
+    const QUIZ_BANK = [
+      {
+        question: "O piolho consegue pular e voar de uma cabeça para outra?",
+        isTruth: false,
+        explanation: "MITO! Piolhos não têm asas e não têm pernas para pular. Eles apenas engatinham rápido e passam pelo contato direto cabeça com cabeça ou compartilhando objetos."
+      },
+      {
+        question: "Piolhos preferem cabelos limpos do que cabelos sujos?",
+        isTruth: true,
+        explanation: "VERDADE! O piolho prefere couro cabeludo limpo porque é mais fácil para se fixar e alimentar. Ter piolho NÃO é sinal de falta de higiene!"
+      },
+      {
+        question: "Usar pente fino frequentemente ajuda a detectar e eliminar piolhos no início?",
+        isTruth: true,
+        explanation: "VERDADE! O pente fino é o método mais eficaz e seguro para procurar e retirar piolhos e lêndeas sem agredir a saúde."
+      },
+      {
+        question: "Compartilhar bonés, escovas e tiaras pode transmitir piolho?",
+        isTruth: true,
+        explanation: "VERDADE! Esses objetos entram em contato direto com os fios e podem carregar piolhos ou lêndeas. É melhor não compartilhar!"
+      },
+      {
+        question: "Passar inseticida de casa no cabelo é seguro para matar piolho?",
+        isTruth: false,
+        explanation: "MITO PERIGOSO! Nunca use produtos químicos da casa ou inseticidas na cabeça. Use apenas recomendações do médico ou farmacêutico!"
+      },
+      {
+        question: "Manter cabelos compridos presos na escola ajuda a prevenir o contágio?",
+        isTruth: true,
+        explanation: "VERDADE! O cabelo preso reduz o contato direto entre os fios das crianças durante brincadeiras e atividades."
+      }
+    ];
+
+    // Items for Sorting Game
+    const SORT_ITEMS_BANK = [
+      { title: "Boné de Futebol", isPersonal: true, icon: "fa-hat-cowboy", tip: "Muda de cabeça e pode levar piolhos!" },
+      { title: "Livro de Historinhas", isPersonal: false, icon: "fa-book", tip: "Leitura compartilhada é super segura!" },
+      { title: "Escova / Pente", isPersonal: true, icon: "fa-broom", tip: "Pentes acumulam fios de cabelo e não devem ser divididos." },
+      { title: "Bola de Basquete", isPersonal: false, icon: "fa-basketball", tip: "Brinquedos de mão não transmitem piolho!" },
+      { title: "Tiara e Laço", isPersonal: true, icon: "fa-ribbon", tip: "Acessórios de cabelo são de uso individual." },
+      { title: "Lápis de Cor", isPersonal: false, icon: "fa-pencil", tip: "Materiais escolares comuns podem ser divididos." }
+    ];
+
+    // Global Game State
+    let soundEnabled = true;
+    let playerCount = 2;
+    let players = [];
+    let currentPlayerIdx = 0;
+    let isRolling = false;
+    let gameActive = false;
+
+    // Mini-game states
+    let currentQuizIndex = 0;
+    let combTimerInterval = null;
+    let combTimeLeft = 12;
+    let combScore = 0;
+    let combLiceList = [];
+    let currentSortItems = [];
+    let currentSortIdx = 0;
+
+    /* ==========================================================================
+       SETUP & INITIALIZATION LOGIC
+       ========================================================================== */
+
+    window.onload = function() {
+      setPlayerCount(2);
+    };
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const icon = document.getElementById('sound-icon');
+      const btn = document.getElementById('btn-sound-toggle');
+      if (soundEnabled) {
+        icon.className = 'fa-solid fa-volume-high text-teal-600';
+        btn.querySelector('span').innerText = 'Som: On';
+      } else {
+        icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+        btn.querySelector('span').innerText = 'Som: Off';
+      }
+    }
+
+    function setPlayerCount(count) {
+      playerCount = count;
+      [2, 3, 4].forEach(n => {
+        const btn = document.getElementById(`btn-count-${n}`);
+        if (n === count) {
+          btn.className = 'btn-player-count py-3 rounded-2xl border-2 border-teal-500 bg-teal-50 text-teal-800 font-bold font-heading text-lg transition flex items-center justify-center gap-2 shadow-sm';
+        } else {
+          btn.className = 'btn-player-count py-3 rounded-2xl border-2 border-slate-200 bg-white text-slate-600 hover:border-teal-300 font-bold font-heading text-lg transition flex items-center justify-center gap-2';
+        }
+      });
+      renderPlayerInputs();
+    }
+
+    function renderPlayerInputs() {
+      const container = document.getElementById('player-inputs');
+      container.innerHTML = '';
+
+      const defaultNames = ['Papai', 'Mamãe', 'Filho(a)', 'Vovô(á)'];
+
+      for (let i = 0; i < playerCount; i++) {
+        const preset = AVATAR_PRESETS[i];
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-200';
+        div.innerHTML = `
+          <div class="w-10 h-10 rounded-xl ${preset.bgClass} text-white flex items-center justify-center text-xl shadow-sm flex-shrink-0">
+            <i class="fa-solid ${preset.icon}"></i>
+          </div>
+          <div class="flex-grow">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Jogador ${i + 1}</label>
+            <input type="text" id="input-player-name-${i}" value="${defaultNames[i]}" maxlength="12" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-slate-800 font-semibold focus:outline-none focus:border-teal-500 transition text-sm" />
+          </div>
+        `;
+        container.appendChild(div);
+      }
+    }
+
+    function startGame() {
+      if (soundEnabled) soundFX.playSuccess();
+
+      players = [];
+      for (let i = 0; i < playerCount; i++) {
+        const nameInput = document.getElementById(`input-player-name-${i}`);
+        const name = nameInput ? nameInput.value.trim() || `Jogador ${i + 1}` : `Jogador ${i + 1}`;
+        const preset = AVATAR_PRESETS[i];
+
+        players.push({
+          id: i,
+          name: name,
+          avatar: preset.icon,
+          colorClass: preset.bgClass,
+          position: 0,
+          points: 0,
+          combMasterCount: 0,
+          quizCorrectCount: 0
+        });
+      }
+
+      currentPlayerIdx = 0;
+      gameActive = true;
+
+      document.getElementById('setup-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+      document.getElementById('game-screen').classList.add('flex');
+
+      renderBoardGrid();
+      updateTurnUI();
+      updateScoreboard();
+    }
+
+    function renderBoardGrid() {
+      const grid = document.getElementById('board-grid');
+      grid.innerHTML = '';
+
+      BOARD_TILES.forEach((tile) => {
+        const tileDiv = document.createElement('div');
+        tileDiv.id = `tile-${tile.id}`;
+        
+        let typeBg = 'bg-slate-100 border-slate-200 text-slate-700';
+        if (tile.type === 'start') typeBg = 'bg-teal-600 text-white border-teal-700';
+        else if (tile.type === 'finish') typeBg = 'bg-amber-500 text-white border-amber-600 pulse-glow';
+        else if (tile.type === 'good') typeBg = 'bg-emerald-50 border-emerald-200 text-emerald-900';
+        else if (tile.type === 'bad') typeBg = 'bg-rose-50 border-rose-200 text-rose-900';
+        else if (tile.type === 'quiz') typeBg = 'bg-purple-50 border-purple-200 text-purple-900';
+        else if (tile.type === 'comb_game' || tile.type === 'sort_game') typeBg = 'bg-amber-50 border-amber-200 text-amber-900';
+
+        tileDiv.className = `tile-card relative rounded-2xl p-3 border-2 ${typeBg} flex flex-col justify-between h-28 shadow-sm`;
+
+        tileDiv.innerHTML = `
+          <div class="flex items-center justify-between text-xs font-bold opacity-80">
+            <span>#${tile.id}</span>
+            <i class="fa-solid ${tile.icon}"></i>
+          </div>
+          <div class="font-heading font-bold text-xs sm:text-sm leading-tight my-1">
+            ${tile.title}
+          </div>
+          <!-- Pawns slot container -->
+          <div id="tile-pawns-${tile.id}" class="flex items-center justify-start -space-x-1 min-h-[24px]">
+            <!-- Player pawns injected here -->
+          </div>
+        `;
+
+        grid.appendChild(tileDiv);
+      });
+
+      updatePawnsOnBoard();
+    }
+
+    function updatePawnsOnBoard() {
+      // Clear all pawns slot
+      BOARD_TILES.forEach(t => {
+        const slot = document.getElementById(`tile-pawns-${t.id}`);
+        if (slot) slot.innerHTML = '';
+      });
+
+      // Place each player's pawn
+      players.forEach((p, idx) => {
+        const slot = document.getElementById(`tile-pawns-${p.position}`);
+        if (slot) {
+          const pawn = document.createElement('div');
+          const isCurrent = idx === currentPlayerIdx;
+          pawn.className = `w-7 h-7 rounded-full ${p.colorClass} text-white flex items-center justify-center text-xs shadow-md border-2 border-white pawn ${isCurrent ? 'pawn-active z-10 scale-110' : ''}`;
+          pawn.title = `${p.name} (Pontos: ${p.points})`;
+          pawn.innerHTML = `<i class="fa-solid ${p.avatar}"></i>`;
+          slot.appendChild(pawn);
+        }
+      });
+    }
+
+    function updateTurnUI() {
+      const curP = players[currentPlayerIdx];
+      document.getElementById('current-player-name').innerText = curP.name;
+      const avatarBox = document.getElementById('current-player-avatar');
+      avatarBox.className = `w-12 h-12 rounded-2xl ${curP.colorClass} text-white flex items-center justify-center text-2xl shadow-md`;
+      avatarBox.innerHTML = `<i class="fa-solid ${curP.avatar}"></i>`;
+
+      document.getElementById('current-player-status').innerText = `Sua vez! Clique para rolar o dado.`;
+      updatePawnsOnBoard();
+    }
+
+    function updateScoreboard() {
+      const sb = document.getElementById('mini-scoreboard');
+      sb.innerHTML = '';
+
+      players.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200';
+        div.innerHTML = `
+          <div class="w-6 h-6 rounded-lg ${p.colorClass} text-white flex items-center justify-center text-xs">
+            <i class="fa-solid ${p.avatar}"></i>
+          </div>
+          <div class="text-xs">
+            <span class="font-bold text-slate-800 block leading-none">${p.name}</span>
+            <span class="text-[10px] text-teal-600 font-bold">${p.points} pts (Casa ${p.position})</span>
+          </div>
+        `;
+        sb.appendChild(div);
+      });
+    }
+
+    function logAction(msg) {
+      document.getElementById('game-log').innerHTML = msg;
+    }
+
+    /* ==========================================================================
+       DICE & MOVEMENT MECHANICS
+       ========================================================================== */
+
+    function rollDice() {
+      if (!gameActive || isRolling) return;
+      isRolling = true;
+
+      const btnRoll = document.getElementById('btn-roll-dice');
+      btnRoll.disabled = true;
+      btnRoll.classList.add('opacity-50', 'cursor-not-allowed');
+
+      const diceBox = document.getElementById('dice-container');
+      diceBox.classList.add('dice-rolling');
+
+      if (soundEnabled) soundFX.playDiceRoll();
+
+      let rollCount = 0;
+      const rollInterval = setInterval(() => {
+        const randVal = Math.floor(Math.random() * 6) + 1;
+        diceBox.innerText = randVal;
+        rollCount++;
+
+        if (rollCount > 10) {
+          clearInterval(rollInterval);
+          const finalRoll = Math.floor(Math.random() * 6) + 1;
+          diceBox.classList.remove('dice-rolling');
+          diceBox.innerText = finalRoll;
+
+          logAction(`<strong>${players[currentPlayerIdx].name}</strong> tirou <strong>${finalRoll}</strong> no dado!`);
+          
+          setTimeout(() => {
+            movePlayer(finalRoll);
+          }, 400);
+        }
+      }, 60);
+    }
+
+    function movePlayer(steps) {
+      const p = players[currentPlayerIdx];
+      let targetPos = p.position + steps;
+      if (targetPos >= BOARD_TILES.length - 1) {
+        targetPos = BOARD_TILES.length - 1; // Finish line
+      }
+
+      // Step by step animation
+      let stepCount = 0;
+      const moveInterval = setInterval(() => {
+        p.position++;
+        if (soundEnabled) soundFX.playPop();
+        updatePawnsOnBoard();
+        stepCount++;
+
+        if (p.position >= targetPos || stepCount >= steps) {
+          clearInterval(moveInterval);
+          setTimeout(() => {
+            handleTileAction(p.position);
+          }, 500);
+        }
+      }, 300);
+    }
+
+    function handleTileAction(pos) {
+      const p = players[currentPlayerIdx];
+      const tile = BOARD_TILES[pos];
+
+      if (tile.type === 'start') {
+        finishTurn();
+      } else if (tile.type === 'good') {
+        p.points += tile.points;
+        showEventModal('Atitude Recomendada! 🎉', tile.desc, 'fa-circle-check', 'bg-emerald-100 text-emerald-600', () => {
+          if (tile.delta) p.position = Math.min(BOARD_TILES.length - 1, p.position + tile.delta);
+          updatePawnsOnBoard();
+          finishTurn();
+        });
+      } else if (tile.type === 'bad') {
+        p.points = Math.max(0, p.points + tile.points);
+        showEventModal('Atenção ao Hábito! ⚠️', tile.desc, 'fa-triangle-exclamation', 'bg-rose-100 text-rose-600', () => {
+          if (tile.delta) p.position = Math.max(0, p.position + tile.delta);
+          updatePawnsOnBoard();
+          finishTurn();
+        });
+      } else if (tile.type === 'quiz') {
+        openQuizModal();
+      } else if (tile.type === 'comb_game') {
+        openCombMiniGameModal();
+      } else if (tile.type === 'sort_game') {
+        openSortMiniGameModal();
+      } else if (tile.type === 'finish') {
+        p.points += tile.points;
+        if (soundEnabled) soundFX.playVictory();
+        endGame();
+      }
+    }
+
+    function finishTurn() {
+      updateScoreboard();
+      const btnRoll = document.getElementById('btn-roll-dice');
+      btnRoll.disabled = false;
+      btnRoll.classList.remove('opacity-50', 'cursor-not-allowed');
+      isRolling = false;
+
+      // Check if any player hit the finish line
+      if (players[currentPlayerIdx].position >= BOARD_TILES.length - 1) {
+        endGame();
+        return;
+      }
+
+      // Next player turn
+      currentPlayerIdx = (currentPlayerIdx + 1) % playerCount;
+      updateTurnUI();
+    }
+
+    /* ==========================================================================
+       MODAL HANDLING & HELPER FUNCTIONS
+       ========================================================================== */
+
+    function openModalOverlay() {
+      document.getElementById('modal-overlay').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.add('hidden');
+      document.getElementById('modal-event').classList.add('hidden');
+      document.getElementById('modal-quiz').classList.add('hidden');
+      document.getElementById('modal-comb-game').classList.add('hidden');
+      document.getElementById('modal-sort-game').classList.add('hidden');
+      document.getElementById('modal-help').classList.add('hidden');
+
+      if (combTimerInterval) clearInterval(combTimerInterval);
+
+      if (gameActive && isRolling) {
+        finishTurn();
+      }
+    }
+
+    function showHelpModal() {
+      openModalOverlay();
+      document.getElementById('modal-help').classList.remove('hidden');
+    }
+
+    function showEventModal(title, desc, icon, iconBgStyle, onContinue) {
+      openModalOverlay();
+      const modal = document.getElementById('modal-event');
+      modal.classList.remove('hidden');
+
+      document.getElementById('event-title').innerText = title;
+      document.getElementById('event-description').innerText = desc;
+      const iconBg = document.getElementById('event-icon-bg');
+      iconBg.className = `w-16 h-16 mx-auto rounded-2xl flex items-center justify-center text-3xl mb-4 ${iconBgStyle}`;
+      document.getElementById('event-icon').className = `fa-solid ${icon}`;
+
+      if (soundEnabled) soundFX.playPop();
+
+      // Temporarily bind continue action
+      const btn = modal.querySelector('button');
+      btn.onclick = () => {
+        closeModal();
+        if (onContinue) onContinue();
+      };
+    }
+
+    /* ==========================================================================
+       MINI-GAME 1: QUIZ (MITO VS VERDADE)
+       ========================================================================== */
+
+    function openQuizModal() {
+      openModalOverlay();
+      const modal = document.getElementById('modal-quiz');
+      modal.classList.remove('hidden');
+
+      // Pick question based on index rotation
+      const q = QUIZ_BANK[currentQuizIndex % QUIZ_BANK.length];
+      currentQuizIndex++;
+
+      document.getElementById('quiz-question').innerText = q.question;
+      document.getElementById('quiz-feedback').classList.add('hidden');
+      document.getElementById('btn-quiz-continue').classList.add('hidden');
+
+      if (soundEnabled) soundFX.playPop();
+    }
+
+    function answerQuiz(userAnswer) {
+      const q = QUIZ_BANK[(currentQuizIndex - 1) % QUIZ_BANK.length];
+      const p = players[currentPlayerIdx];
+      const feedback = document.getElementById('quiz-feedback');
+      const resultTitle = document.getElementById('quiz-result-title');
+      const resultExp = document.getElementById('quiz-explanation');
+
+      feedback.classList.remove('hidden');
+
+      if (userAnswer === q.isTruth) {
+        p.points += 20;
+        p.quizCorrectCount++;
+        if (soundEnabled) soundFX.playSuccess();
+        resultTitle.innerText = "Resposta Correta! (+20 pontos)";
+        resultTitle.className = "font-bold text-base mb-1 text-emerald-700";
+      } else {
+        if (soundEnabled) soundFX.playFail();
+        resultTitle.innerText = "Ops! Não foi desta vez.";
+        resultTitle.className = "font-bold text-base mb-1 text-rose-700";
+      }
+
+      resultExp.innerText = q.explanation;
+      document.getElementById('btn-quiz-continue').classList.remove('hidden');
+    }
+
+    /* ==========================================================================
+       MINI-GAME 2: CAÇA AO PIOLHO COM PENTE FINO (CANVAS ARCADE)
+       ========================================================================== */
+
+    function openCombMiniGameModal() {
+      openModalOverlay();
+      const modal = document.getElementById('modal-comb-game');
+      modal.classList.remove('hidden');
+
+      document.getElementById('btn-start-comb').classList.remove('hidden');
+      document.getElementById('btn-comb-finish').classList.add('hidden');
+      document.getElementById('comb-timer').innerText = '12s';
+      document.getElementById('comb-score').innerText = '0';
+
+      // Clear Canvas
+      const canvas = document.getElementById('comb-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+
+      // Draw background hair preview
+      drawHairBackground(ctx, canvas.width, canvas.height);
+    }
+
+    function drawHairBackground(ctx, w, h) {
+      ctx.fillStyle = '#fef3c7'; // scalp color
+      ctx.fillRect(0, 0, w, h);
+
+      // Hair strands
+      ctx.strokeStyle = '#78350f';
+      ctx.lineWidth = 2;
+      for (let i = 0; i < w; i += 8) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.bezierCurveTo(i + 10, h * 0.3, i - 10, h * 0.7, i, h);
+        ctx.stroke();
+      }
+    }
+
+    function startCombMiniGame() {
+      document.getElementById('btn-start-comb').classList.add('hidden');
+      combTimeLeft = 12;
+      combScore = 0;
+      combLiceList = [];
+
+      const canvas = document.getElementById('comb-canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Spawn initial bugs
+      for (let i = 0; i < 7; i++) {
+        spawnLouse(canvas.width, canvas.height);
+      }
+
+      // Handle user taps/clicks on canvas
+      canvas.onclick = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // Check collision with lice
+        combLiceList.forEach(bug => {
+          if (!bug.caught) {
+            const dist = Math.hypot(bug.x - mouseX, bug.y - mouseY);
+            if (dist < bug.radius + 15) {
+              bug.caught = true;
+              combScore++;
+              if (soundEnabled) soundFX.playPop();
+              document.getElementById('comb-score').innerText = combScore;
+              spawnLouse(canvas.width, canvas.height); // Respawn new one
+            }
+          }
+        });
+      };
+
+      // Game loop interval
+      combTimerInterval = setInterval(() => {
+        combTimeLeft--;
+        document.getElementById('comb-timer').innerText = `${combTimeLeft}s`;
+
+        if (combTimeLeft <= 0) {
+          clearInterval(combTimerInterval);
+          finishCombArcade();
+        }
+      }, 1000);
+
+      // Animation loop for bugs movement
+      function animateArcade() {
+        if (combTimeLeft > 0) {
+          drawHairBackground(ctx, canvas.width, canvas.height);
+
+          combLiceList.forEach(bug => {
+            if (!bug.caught) {
+              // Wobble move
+              bug.x += bug.vx;
+              bug.y += bug.vy;
+              if (bug.x < 10 || bug.x > canvas.width - 10) bug.vx *= -1;
+              if (bug.y < 10 || bug.y > canvas.height - 10) bug.vy *= -1;
+
+              // Draw Bug / Louse
+              ctx.save();
+              ctx.translate(bug.x, bug.y);
+              ctx.fillStyle = '#451a03';
+              ctx.beginPath();
+              ctx.ellipse(0, 0, bug.radius, bug.radius * 0.7, 0, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Legs
+              ctx.strokeStyle = '#451a03';
+              ctx.lineWidth = 1.5;
+              [-4, 0, 4].forEach(lx => {
+                ctx.beginPath();
+                ctx.moveTo(lx, -6); ctx.lineTo(lx, -10);
+                ctx.moveTo(lx, 6); ctx.lineTo(lx, 10);
+                ctx.stroke();
+              });
+
+              ctx.restore();
+            }
+          });
+
+          requestAnimationFrame(animateArcade);
+        }
+      }
+      requestAnimationFrame(animateArcade);
+    }
+
+    function spawnLouse(w, h) {
+      combLiceList.push({
+        x: Math.random() * (w - 40) + 20,
+        y: Math.random() * (h - 40) + 20,
+        vx: (Math.random() - 0.5) * 2,
+        vy: (Math.random() - 0.5) * 2,
+        radius: 8,
+        caught: false
+      });
+    }
+
+    function finishCombArcade() {
+      const p = players[currentPlayerIdx];
+      const earnedPoints = combScore * 5;
+      p.points += earnedPoints;
+
+      if (combScore >= 5) {
+        p.combMasterCount++;
+        if (soundEnabled) soundFX.playSuccess();
+      } else {
+        if (soundEnabled) soundFX.playFail();
+      }
+
+      document.getElementById('comb-instructions').innerHTML = `
+        <strong class="${combScore >= 5 ? 'text-emerald-600' : 'text-amber-600'} text-sm font-heading block">
+          ${combScore >= 5 ? 'Excelente Limpeza!' : 'Bom Trabalho!'}
+        </strong>
+        Você capturou ${combScore} piolhos e ganhou +${earnedPoints} pontos de prevenção!
+      `;
+
+      document.getElementById('btn-comb-finish').classList.remove('hidden');
+    }
+
+    function finishCombMiniGame() {
+      closeModal();
+    }
+
+    /* ==========================================================================
+       MINI-GAME 3: CLASSIFICADOR DE OBJETOS E ATITUDES
+       ========================================================================== */
+
+    function openSortMiniGameModal() {
+      openModalOverlay();
+      const modal = document.getElementById('modal-sort-game');
+      modal.classList.remove('hidden');
+
+      // Shuffle items
+      currentSortItems = [...SORT_ITEMS_BANK].sort(() => 0.5 - Math.random()).slice(0, 4);
+      currentSortIdx = 0;
+
+      document.getElementById('sort-buttons').classList.remove('hidden');
+      document.getElementById('sort-feedback').classList.add('hidden');
+      document.getElementById('btn-sort-continue').classList.add('hidden');
+
+      renderCurrentSortItem();
+    }
+
+    function renderCurrentSortItem() {
+      document.getElementById('sort-remaining').innerText = currentSortItems.length - currentSortIdx;
+      
+      if (currentSortIdx >= currentSortItems.length) {
+        // Finished all items
+        const p = players[currentPlayerIdx];
+        p.points += 20;
+        if (soundEnabled) soundFX.playSuccess();
+
+        document.getElementById('sort-item-card').className = "bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-6 text-center mb-6";
+        document.getElementById('sort-item-icon').innerHTML = '<i class="fa-solid fa-circle-check text-emerald-500"></i>';
+        document.getElementById('sort-item-title').innerText = "Tudo Classificado!";
+
+        document.getElementById('sort-buttons').classList.add('hidden');
+        document.getElementById('sort-feedback').classList.remove('hidden');
+        document.getElementById('sort-feedback').innerText = "Parabéns! Você demonstrou saber exatamente o que compartilhar e o que é de uso pessoal (+20 pontos).";
+        document.getElementById('btn-sort-continue').classList.remove('hidden');
+        return;
+      }
+
+      const item = currentSortItems[currentSortIdx];
+      document.getElementById('sort-item-icon').innerHTML = `<i class="fa-solid ${item.icon}"></i>`;
+      document.getElementById('sort-item-title').innerText = item.title;
+    }
+
+    function classifyItem(chosenCategory) {
+      const item = currentSortItems[currentSortIdx];
+      const isPersonal = chosenCategory === 'personal';
+      const feedback = document.getElementById('sort-feedback');
+      feedback.classList.remove('hidden');
+
+      if (isPersonal === item.isPersonal) {
+        if (soundEnabled) soundFX.playPop();
+        feedback.className = "p-3 rounded-xl bg-emerald-100 text-emerald-800 text-xs text-center font-semibold mb-4";
+        feedback.innerText = `Correto! ${item.tip}`;
+      } else {
+        if (soundEnabled) soundFX.playFail();
+        feedback.className = "p-3 rounded-xl bg-rose-100 text-rose-800 text-xs text-center font-semibold mb-4";
+        feedback.innerText = `Ops! ${item.tip}`;
+      }
+
+      currentSortIdx++;
+      setTimeout(() => {
+        renderCurrentSortItem();
+      }, 1200);
+    }
+
+    /* ==========================================================================
+       END GAME & WINNER PRESENTATION
+       ========================================================================== */
+
+    function endGame() {
+      gameActive = false;
+
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('flex');
+      document.getElementById('winner-screen').classList.remove('hidden');
+
+      // Sort ranking by points, tie breaker position
+      const ranking = [...players].sort((a, b) => {
+        if (b.points !== a.points) return b.points - a.points;
+        return b.position - a.position;
+      });
+
+      const podiumContainer = document.getElementById('final-podium');
+      podiumContainer.innerHTML = '';
+
+      ranking.forEach((p, rank) => {
+        let badgeTitle = "Guardião da Prevenção";
+        if (p.combMasterCount > 0) badgeTitle = "Mestre do Pente Fino 🧹";
+        else if (p.quizCorrectCount >= 2) badgeTitle = "Sabe-Tudo da Saúde 🧠";
+
+        let rankBadge = `${rank + 1}º Lugar`;
+        let borderStyle = 'border-slate-200';
+        if (rank === 0) {
+          rankBadge = '🥇 Campeão(ã)';
+          borderStyle = 'border-amber-400 bg-amber-50/60 shadow-md';
+        } else if (rank === 1) {
+          rankBadge = '🥈 2º Lugar';
+          borderStyle = 'border-slate-300 bg-slate-50';
+        } else if (rank === 2) {
+          rankBadge = '🥉 3º Lugar';
+          borderStyle = 'border-amber-200 bg-amber-50/20';
+        }
+
+        const div = document.createElement('div');
+        div.className = `p-4 rounded-2xl border-2 ${borderStyle} flex items-center justify-between gap-4 text-left`;
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-2xl ${p.colorClass} text-white flex items-center justify-center text-xl shadow-md">
+              <i class="fa-solid ${p.avatar}"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="font-heading font-bold text-base text-slate-800">${p.name}</h4>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-teal-100 text-teal-800">${rankBadge}</span>
+              </div>
+              <p class="text-xs text-slate-500 font-semibold">${badgeTitle}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="font-heading font-bold text-xl text-teal-700 block">${p.points}</span>
+            <span class="text-[10px] text-slate-400 font-bold uppercase">Pontos</span>
+          </div>
+        `;
+        podiumContainer.appendChild(div);
+      });
+    }
+
+    function resetGame() {
+      document.getElementById('winner-screen').classList.add('hidden');
+      document.getElementById('setup-screen').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
