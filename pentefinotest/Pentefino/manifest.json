@@ -1,0 +1,11 @@
+{
+  "name": "Operação Pente Fino",
+  "short_name": "Pente Fino",
+  "description": "Plataforma educativa sobre prevenção da pediculose, autocuidado e respeito.",
+  "lang": "pt-BR",
+  "start_url": "index.php",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#052d57",
+  "theme_color": "#073b6f"
+}
