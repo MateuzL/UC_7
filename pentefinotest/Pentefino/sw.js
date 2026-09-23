@@ -3,7 +3,7 @@
 const CACHE_NAME = "opf-faicepan-v6-php-contato";
 const CORE = [
   "./",
-  "./index.php",
+  "./index.html",
   "./crianca.html",
   "./professor.html",
   "./familia.html",
@@ -49,6 +49,6 @@ self.addEventListener("fetch", (event) => {
       const copy = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
       return response;
-    }).catch(() => caches.match("./index.php")))
+    }).catch(() => caches.match("./index.html")))
   );
 });
