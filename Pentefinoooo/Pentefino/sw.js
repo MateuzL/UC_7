@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = 'opf-faicepan-v6-jogo-familia-marinheiro';
+const CACHE_NAME = "opf-faicepan-v8-familia-game";
 const CORE = [
   "./",
   "./index.html",
@@ -15,7 +15,8 @@ const CORE = [
   "./script.js",
   "./caca.js",
   "./manifest.json",
-    "./assets/personagens/marinheiro.webp",
+  "./assets/time-dos-cuidados.webp",
+  "./assets/personagens/marinheiro.webp",
   "./assets/personagens/babi.webp",
   "./assets/personagens/biel.webp",
   "./assets/personagens/joao.webp",

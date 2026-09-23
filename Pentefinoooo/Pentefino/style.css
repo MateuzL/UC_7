@@ -719,13 +719,10 @@ body.high-contrast .hunt-hud strong,body.high-contrast .hunt-rules strong{color:
 @media(max-width:640px){.duo-scoreboard,.health-tip-grid,.contact-grid,.topic-grid{grid-template-columns:1fr}.duo-scoreboard{gap:8px}.contact-copy{padding:24px}.contact-form{padding:22px}}
 body.high-contrast .duo-scoreboard>div,body.high-contrast .health-tip-grid article,body.high-contrast .contact-form,body.high-contrast .topic-grid article{background:#fff;color:#000;border-color:#000}body.high-contrast .health-tip-grid h3,body.high-contrast .topic-grid h3{color:#000}body.high-contrast .health-tip-grid p,body.high-contrast .topic-grid p{color:#000}
 
-/* Jogo integrado à Área da Família */
-.family-game-intro{background:linear-gradient(180deg,#f8fcff,#eef8fd);padding-bottom:10px}.family-game-intro .section-heading{max-width:850px}.family-game-intro .section-heading p:last-child{max-width:760px}
 
-/* ===== JOGO ENVIADO PELO PROJETO / MISSÃO 1 ===== */
-.embedded-game-card{background:#fff;border:1px solid rgba(7,59,111,.12);border-radius:24px;overflow:hidden;box-shadow:0 24px 60px rgba(7,59,111,.12);margin-top:28px}
-.project-game-frame{display:block;width:100%;height:1500px;border:0;background:#f8fafc}
+/* Jogo Família Sem Piolho — exclusivo da Área da Família */
 .family-game-section{background:linear-gradient(180deg,#f7fcff,#eaf7ff)}
-.mission1-family-game{background:linear-gradient(180deg,#fffdf4,#fff7d9)}
-@media(max-width:800px){.project-game-frame{height:1500px}}
-@media(max-width:600px){.project-game-frame{height:1450px}.embedded-game-card{border-radius:16px}}
+.embedded-game-card{background:#fff;border:1px solid rgba(7,59,111,.12);border-radius:24px;overflow:hidden;box-shadow:0 24px 60px rgba(7,59,111,.12);margin-top:28px}
+.project-game-frame{display:block;width:100%;height:1650px;border:0;background:#f8fafc}
+@media(max-width:800px){.project-game-frame{height:1650px}}
+@media(max-width:600px){.project-game-frame{height:1550px}.embedded-game-card{border-radius:16px}}

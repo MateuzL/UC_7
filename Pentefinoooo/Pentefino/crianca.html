@@ -133,15 +133,37 @@
 </div>
 </div>
 </section>
-<section class="game-zone game-zone-yellow mission1-family-game" id="pode-nao-pode">
-<div class="shell">
-<div class="section-heading compact-heading reveal">
-<p class="kicker">MISSÃO 01 · JOGO EM FAMÍLIA</p>
-<h2>Família Sem Piolho</h2>
-<p>Este é o jogo enviado para o projeto: de 2 a 4 jogadores, com tabuleiro, desafios, minijogos e perguntas educativas sobre prevenção e cuidados.</p>
+<section class="game-zone game-zone-yellow" id="pode-nao-pode">
+<div class="shell games-layout">
+<div class="games-copy reveal">
+<div class="character-bubble">
+<img alt="Marinheiro Pente Fino segurando um pente fino" decoding="async" height="750" loading="lazy" src="assets/personagens/marinheiro.webp" width="600"/>
+<div><span>MISSÃO 01 · EM DUPLA</span><strong>Dupla do Pente Fino</strong></div>
 </div>
-<div class="embedded-game-card">
-<iframe src="familia_sem_piolho.html" title="Jogo Família Sem Piolho — Missão 1" loading="lazy" allow="autoplay" class="project-game-frame"></iframe>
+<h2>Dois jogadores, uma missão</h2>
+<p>Joguem juntos, respondam perguntas sobre prevenção e acumulem pontos como equipe. A cada rodada, a vez passa para o próximo jogador.</p>
+<div class="duo-scoreboard" aria-label="Placar da dupla">
+<div><span>JOGADOR 1</span><strong id="playerOneScore">0</strong></div>
+<div><span>JOGADOR 2</span><strong id="playerTwoScore">0</strong></div>
+<div><span>DUPLA</span><strong id="scoreText">0 / 6</strong></div>
+</div>
+<div class="mission-progress"><div><span>RODADAS</span><strong id="duoTurnText">Vez do Jogador 1</strong></div><div class="progress-track"><i id="progressBar"></i></div></div>
+</div>
+<div class="quiz-console reveal" id="quizConsole">
+<div class="console-head"><span><i></i> MISSÃO COOPERATIVA</span><strong id="quizMissionNumber">RODADA 01</strong></div>
+<div class="console-body">
+<p class="question-label" id="duoPlayerLabel">VEZ DO JOGADOR 1</p>
+<h3 id="quizQuestion">Compartilhar pentes e bonés com os colegas?</h3>
+<div class="quiz-options">
+<button data-answer="yes" type="button"><span aria-hidden="true">✓</span> PODE</button>
+<button data-answer="no" type="button"><span aria-hidden="true">×</span> NÃO PODE</button>
+</div>
+<button class="btn btn-primary quiz-next" hidden="" id="quizNext" type="button">Próxima rodada</button>
+<p aria-live="polite" class="feedback" id="quizFeedback">Conversem e escolham a resposta juntos.</p><div aria-live="polite" class="game-reaction" id="quizReaction">
+<img alt="Oficial Morango" decoding="async" height="750" id="quizReactionImg" loading="lazy" src="assets/personagens/morango.webp" width="600"/>
+<p id="quizReactionText">O Oficial Morango está pronto para comemorar o trabalho da dupla!</p>
+</div>
+</div>
 </div>
 </div>
 </section>
