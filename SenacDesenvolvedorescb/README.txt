@@ -1,80 +1,72 @@
-DESENVOLVEDORES CORUMBÁ - PROJETO COMPLETO
-
-ESTRUTURA
-index.php          Página principal
-portfolio.html      Página individual/portfólio dos desenvolvedores
-style.css            Estilos do site
-script.js            Dados dos 12 desenvolvedores + interações
- index.php          Formulário de contato por PHP
-assets/desenvolvedores/  Fotos dos desenvolvedores
-
-COMO PERSONALIZAR OS DESENVOLVEDORES
-1. Abra script.js.
-2. No início do arquivo existe a lista "developers".
-3. Para cada desenvolvedor, altere:
-   - name: nome
-   - role: função
-   - stack: tecnologias
-   - project: projeto principal
-   - photo: nome do arquivo da foto
-   - bio: resumo profissional
-   - skills: habilidades
-   - projects: projetos do portfólio
-4. Coloque as fotos em assets/desenvolvedores/.
-5. Os 11 arquivos enviados já estão incluídos. O dev12.svg é apenas um espaço reservado para o 12º integrante.
-
-COMPORTAMENTO
-- A página inicial mostra 12 desenvolvedores em grade: 3 por linha no computador, 2 no tablet e 1 no celular.
-- Clicar na FOTO ou em "Currículo / Portfólio" abre portfolio.html?dev=N.
-- O portfólio individual mostra foto, currículo/resumo, stack, habilidades e projetos.
-- A mesma página portfolio.html é reutilizada para os 12 desenvolvedores. Os dados ficam no script.js.
-
-FOTOS INCLUÍDAS
-Vinicius.jpeg
-Dayane.jpeg
-Leleo.jpeg
-Jullya.jpeg
-Carlos.jpeg
-Enrique.jpeg
-Freddy.jpeg
-Fabio.jpeg
-Mateus.jpeg
-Pedro.jpeg
-Felipe.jpeg
-dev12.svg (substitua pela foto do 12º desenvolvedor quando tiver)
+DESENVOLVEDORES CORUMBÁ - FORMULÁRIO SMTP TITAN + NOTIFICAÇÃO FLUTUANTE
 
 FORMULÁRIO DE CONTATO
-O formulário envia para index.php. Abra index.php e troque:
-SEU_EMAIL_AQUI@exemplo.com
-pelo e-mail que deve receber as mensagens.
+---------------------
+O formulário usa SMTP autenticado da conta Titan da HostGator.
 
-IMPORTANTE: mail() depende da configuração de e-mail do servidor PHP. Em hospedagens sem mail() configurado, use PHPMailer/SMTP ou outro serviço de envio.
+Remetente SMTP:
+contato@desenvolvedorcb.com.br
 
-COMO TESTAR
-- Para páginas HTML, abra index.php no navegador.
-- Para testar o index.php, hospede o projeto em um servidor PHP (XAMPP, WAMP, Laragon ou hospedagem).
+Destinatário:
+mariahelenalbaneze@gmail.com
 
-ORDEM ALEATÓRIA DOS DESENVOLVEDORES
------------------------------------
-A equipe da página inicial é embaralhada automaticamente sempre que a página é carregada.
-O sistema mantém os índices originais dos portfólios, então clicar em uma pessoa continua abrindo o portfólio correto.
-Também há uma pequena proteção para evitar que o mesmo desenvolvedor fique em primeiro lugar em carregamentos consecutivos da mesma sessão.
+Servidor SMTP Titan:
+smtp.titan.email
 
-ATUALIZAÇÕES DESTA VERSÃO
-- Fundo Matrix animado restaurado na página inicial e nos portfólios.
-- Galeria agora usa imagens demonstrativas em assets/galeria/.
-- Projetos agora usam imagens demonstrativas em assets/projetos/.
-- Os 12 desenvolvedores possuem formação preenchida como "Técnico em Desenvolvimento de Sistemas — Concluído".
-- Mateus também foi alterado para formação concluída.
-- A numeração sobre as fotos dos desenvolvedores permanece removida.
-- A ordem dos desenvolvedores continua sendo embaralhada a cada acesso.
+Porta:
+465
 
-Para substituir as imagens da galeria/projetos, troque os arquivos SVG mantendo os mesmos nomes, ou altere os caminhos no index.php.
+Criptografia:
+SSL/TLS
 
+USO DA SENHA
+------------
+A senha solicitada em email-config.php é a senha da própria conta Titan:
+contato@desenvolvedorcb.com.br
 
-FORMULÁRIO
-O site agora usa index.php e o processamento do formulário está no próprio arquivo. O destinatário configurado é mariahelenalbaneze@gmail.com. O envio usa mail() e depende da configuração de e-mail do servidor/hosting.
+Não é a senha do painel da HostGator/cPanel.
 
+CONFIGURAÇÃO OBRIGATÓRIA NO HOSTGATOR
+-------------------------------------
+No gerenciamento do e-mail Titan, ative a opção equivalente a:
+"Ative o Titan em outros aplicativos" / uso em aplicativos externos.
 
-VERSÃO DE DESENVOLVIMENTO: index.html
-Para publicação com processamento do formulário, renomeie/converta para index.php e mantenha o processamento PHP no topo.
+Se a conta tiver autenticação de dois fatores, o Titan pode exigir uma senha
+de aplicativo para conexões externas.
+
+CONFIGURAR A SENHA
+------------------
+1. Abra o arquivo email-config.php.
+2. Localize:
+   COLOQUE_AQUI_A_SENHA_DO_CONTATO
+3. Substitua pelo valor da senha da conta Titan contato@desenvolvedorcb.com.br.
+4. Salve o arquivo.
+5. Não compartilhe essa senha em chats, prints ou repositórios públicos.
+
+MELHORIAS DESTA VERSÃO
+-----------------------
+- O formulário agora é enviado sem recarregar a página usando JavaScript/AJAX.
+- O botão mostra "ENVIANDO..." durante o envio.
+- O sucesso ou erro aparece como uma notificação flutuante (toast),
+  sem ocupar espaço dentro do layout da página.
+- O formulário é limpo automaticamente quando o envio é concluído com sucesso.
+- O link "Entrar em contato" dos portfólios usa um caminho relativo
+  (index.php#contato), evitando erro 404 quando o site está publicado no
+  diretório raiz do domínio.
+- A página index.php mantém a rolagem automática até a seção de contato.
+
+PUBLICAÇÃO NA HOSTGATOR
+-----------------------
+1. Faça backup da versão atual do site.
+2. Envie os arquivos do ZIP para a pasta pública do domínio (normalmente public_html).
+3. Confirme que o arquivo principal é index.php.
+4. Confirme que email-config.php está no mesmo diretório do index.php.
+5. Acesse o site.
+6. Teste o formulário de contato.
+7. Verifique a caixa de entrada e o spam de mariahelenalbaneze@gmail.com.
+
+LINK "ENTRAR EM CONTATO"
+------------------------
+Os botões de contato dos portfólios individuais usam index.php#contato
+para voltar diretamente à seção do formulário. O caminho é relativo ao
+próprio diretório do portfólio, evitando problemas com caminhos absolutos.
